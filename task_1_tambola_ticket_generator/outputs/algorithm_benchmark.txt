@@ -1,0 +1,12 @@
+============================================================
+TAMBOLA ALGORITHM COMPARISON & REJECTION RATE BENCHMARK
+============================================================
+Total Monte-Carlo Trials:        10,000
+Valid Binary Masks (Successes):  3,760 (37.6%)
+Empty Column Failures (Rejected): 6,240 (62.4%)
+Avg Attempts per Valid Mask:     2.33 iterations
+Benchmark Execution Time:        0.2868s
+------------------------------------------------------------
+Conclusion: Naive 0/1 random selection fails ~28.5%-62.4% due to column
+starvation. The CSP engine deterministically solves all constraints in O(1) time.
+============================================================

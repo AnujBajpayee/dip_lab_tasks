@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 290" width="720" height="290">
+  <defs>
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="cellActive" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+  </defs>
+  <!-- Card Background -->
+  <rect x="15" y="15" width="690" height="260" rx="16" fill="url(#cardBg)" stroke="#334155" stroke-width="2"/>
+  <!-- Title -->
+  <text x="360.0" y="48" fill="#f8fafc" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" text-anchor="middle" letter-spacing="2">TKT-2026-ALPHA</text>
+  <rect x="47" y="77" width="66" height="56" rx="8" fill="#1e293b" fill-opacity="0.6" stroke="#334155" stroke-width="1"/>
+  <circle cx="80.0" cy="105.0" r="2" fill="#475569" />
+  <rect x="117" y="77" width="66" height="56" rx="8" fill="#1e293b" fill-opacity="0.6" stroke="#334155" stroke-width="1"/>
+  <circle cx="150.0" cy="105.0" r="2" fill="#475569" />
+  <rect x="187" y="77" width="66" height="56" rx="8" fill="#1e293b" fill-opacity="0.6" stroke="#334155" stroke-width="1"/>
+  <circle cx="220.0" cy="105.0" r="2" fill="#475569" />
+  <rect x="257" y="77" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="290.0" y="112.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">34</text>
+  <rect x="327" y="77" width="66" height="56" rx="8" fill="#1e293b" fill-opacity="0.6" stroke="#334155" stroke-width="1"/>
+  <circle cx="360.0" cy="105.0" r="2" fill="#475569" />
+  <rect x="397" y="77" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="430.0" y="112.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">52</text>
+  <rect x="467" y="77" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="500.0" y="112.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">69</text>
+  <rect x="537" y="77" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="570.0" y="112.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">70</text>
+  <rect x="607" y="77" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="640.0" y="112.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">85</text>
+  <rect x="47" y="137" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="80.0" y="172.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">2</text>
+  <rect x="117" y="137" width="66" height="56" rx="8" fill="#1e293b" fill-opacity="0.6" stroke="#334155" stroke-width="1"/>
+  <circle cx="150.0" cy="165.0" r="2" fill="#475569" />
+  <rect x="187" y="137" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="220.0" y="172.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">21</text>
+  <rect x="257" y="137" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="290.0" y="172.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">38</text>
+  <rect x="327" y="137" width="66" height="56" rx="8" fill="#1e293b" fill-opacity="0.6" stroke="#334155" stroke-width="1"/>
+  <circle cx="360.0" cy="165.0" r="2" fill="#475569" />
+  <rect x="397" y="137" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="430.0" y="172.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">57</text>
+  <rect x="467" y="137" width="66" height="56" rx="8" fill="#1e293b" fill-opacity="0.6" stroke="#334155" stroke-width="1"/>
+  <circle cx="500.0" cy="165.0" r="2" fill="#475569" />
+  <rect x="537" y="137" width="66" height="56" rx="8" fill="#1e293b" fill-opacity="0.6" stroke="#334155" stroke-width="1"/>
+  <circle cx="570.0" cy="165.0" r="2" fill="#475569" />
+  <rect x="607" y="137" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="640.0" y="172.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">90</text>
+  <rect x="47" y="197" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="80.0" y="232.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">9</text>
+  <rect x="117" y="197" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="150.0" y="232.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">15</text>
+  <rect x="187" y="197" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="220.0" y="232.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">28</text>
+  <rect x="257" y="197" width="66" height="56" rx="8" fill="#1e293b" fill-opacity="0.6" stroke="#334155" stroke-width="1"/>
+  <circle cx="290.0" cy="225.0" r="2" fill="#475569" />
+  <rect x="327" y="197" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="360.0" y="232.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">44</text>
+  <rect x="397" y="197" width="66" height="56" rx="8" fill="#1e293b" fill-opacity="0.6" stroke="#334155" stroke-width="1"/>
+  <circle cx="430.0" cy="225.0" r="2" fill="#475569" />
+  <rect x="467" y="197" width="66" height="56" rx="8" fill="#1e293b" fill-opacity="0.6" stroke="#334155" stroke-width="1"/>
+  <circle cx="500.0" cy="225.0" r="2" fill="#475569" />
+  <rect x="537" y="197" width="66" height="56" rx="8" fill="url(#cellActive)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="570.0" y="232.0" fill="#ffffff" font-family="system-ui, sans-serif" font-size="22" font-weight="800" text-anchor="middle">74</text>
+  <rect x="607" y="197" width="66" height="56" rx="8" fill="#1e293b" fill-opacity="0.6" stroke="#334155" stroke-width="1"/>
+  <circle cx="640.0" cy="225.0" r="2" fill="#475569" />
+</svg>
