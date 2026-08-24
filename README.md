@@ -53,6 +53,23 @@ dip_lab_tasks/
 │       ├── scenery_original_rgb.png         # Input scenery image
 │       └── scenery_comparison_grid.png      # 9-Panel scenery comparison grid
 │
+├── task_3_bit_plane_slicing/
+│   ├── README.md                      # 8-bit decomposition theory, visible input/output grids, steganography
+│   ├── bit_plane.py                   # Bit extraction (0-7), progressive reconstruction, entropy & LSB
+│   ├── visualizer.py                  # Synthesizer for rich targets, watermarks & 9-panel composite grids
+│   ├── main.py                        # Standalone CLI runner for Task 3
+│   ├── test_bit_plane.py              # Pytest unit tests for Task 3
+│   └── outputs/
+│       ├── test_pattern_original.png  # Input calibrated test pattern
+│       ├── test_pattern_plane_0.png   # Bit plane 0 (LSB)
+│       ├── test_pattern_plane_7.png   # Bit plane 7 (MSB)
+│       ├── test_pattern_bit_planes_grid.png # 9-Panel bit plane decomposition grid
+│       ├── test_pattern_cumulative_reconstruction_grid.png # Progressive reconstruction grid
+│       ├── test_pattern_watermark_original.png # Binary watermark security emblem
+│       ├── test_pattern_stego_embedded.png # Stego carrier image (imperceptible LSB watermark)
+│       ├── test_pattern_extracted_watermark.png # Exact recovered watermark
+│       └── test_pattern_steganography_demo.png # 4-Panel steganography demonstration
+│
 ├── .github/
 │   ├── workflows/
 │   │   └── ci.yml                     # Multi-OS & Multi-Python CI workflow
@@ -68,7 +85,7 @@ dip_lab_tasks/
 ├── SECURITY.md
 ├── pyproject.toml
 ├── requirements.txt
-└── run_all.py                         # Single runner to execute both tasks & update all outputs
+└── run_all.py                         # Single runner to execute all tasks & update all outputs
 ```
 
 ---
@@ -85,6 +102,12 @@ dip_lab_tasks/
 - **Algorithms**: ITU-R BT.601, ITU-R BT.709 / sRGB, Simple Average, HSL Lightness / Desaturation, Linearized Gamma-Corrected Luma, and Single-Channel decompositions.
 - **Outputs**: Calibrated test target conversions and 9-panel side-by-side composite comparison grids.
 - **Detailed Documentation**: See [`task_2_rgb_to_greyscale_conversion/README.md`](task_2_rgb_to_greyscale_conversion/README.md).
+
+### [Task 3: 8-Bit Plane Slicing & Digital Steganography](task_3_bit_plane_slicing/)
+- **Description**: Mathematical decomposition of 8-bit monochromatic images into 8 binary matrices (1-bit planes), isolating geometric structure in high-order bits (MSB) and fine texture/noise in low-order bits (LSB).
+- **Applications**: Selective multi-plane reconstruction, lossy image compression (50% bit reduction with $>94\%$ energy conservation), and imperceptible Least Significant Bit (LSB) digital watermarking/steganography ($\text{PSNR} > 50\text{ dB}$).
+- **Outputs**: Embedded input patterns, 9-panel bit-plane grids, cumulative progressive decoding grids, and steganography pipelines.
+- **Detailed Documentation**: See [`task_3_bit_plane_slicing/README.md`](task_3_bit_plane_slicing/README.md).
 
 ---
 
@@ -111,19 +134,23 @@ python run_all.py
 
 ### 3. Run Individual Tasks
 ```bash
-# Task 1
+# Task 1: Tambola Generator
 python task_1_tambola_ticket_generator/main.py --ticket
 python task_1_tambola_ticket_generator/main.py --strip
 python task_1_tambola_ticket_generator/main.py --benchmark
 
-# Task 2
+# Task 2: RGB to Greyscale
 python task_2_rgb_to_greyscale_conversion/main.py --generate-test-patterns
+
+# Task 3: Bit Plane Slicing & Steganography
+python task_3_bit_plane_slicing/main.py --generate-test-patterns
 ```
 
 ### 4. Run Automated Unit Tests
 ```bash
 pytest task_1_tambola_ticket_generator/test_tambola.py -v
 pytest task_2_rgb_to_greyscale_conversion/test_grayscale.py -v
+pytest task_3_bit_plane_slicing/test_bit_plane.py -v
 ```
 
 ---

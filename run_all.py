@@ -1,8 +1,9 @@
 """
 DIP Lab Tasks: Master Runner
 ============================
-Executes Task 1 (Tambola Ticket Generator) and Task 2 (RGB-to-Greyscale Converter),
-populating all outputs and benchmarks in their respective dedicated folders.
+Executes Task 1 (Tambola Ticket Generator), Task 2 (RGB-to-Greyscale Converter),
+and Task 3 (Bit Plane Slicing & Digital Steganography), populating all outputs
+and benchmarks in their respective dedicated folders.
 """
 
 from __future__ import annotations
@@ -23,10 +24,12 @@ if hasattr(sys.stdout, "reconfigure"):
 base_dir = Path(__file__).resolve().parent
 sys.path.insert(0, str(base_dir))
 
+# Task 1 Imports
 from task_1_tambola_ticket_generator.generator import generate_ticket, generate_strip, validate_ticket, validate_strip
 from task_1_tambola_ticket_generator.naive_generator import simulate_naive_generation
 from task_1_tambola_ticket_generator.visualizer import ticket_to_ascii, ticket_to_svg, ticket_to_png, strip_to_ascii
 
+# Task 2 Imports
 from task_2_rgb_to_greyscale_conversion.grayscale import (
     to_rec601_luminance,
     to_rec709_luminance,
@@ -41,6 +44,25 @@ from task_2_rgb_to_greyscale_conversion.visualizer import (
     create_comparison_grid,
     compute_image_statistics,
 )
+
+# Task 3 Imports
+from task_3_bit_plane_slicing.bit_plane import (
+    extract_all_bit_planes,
+    reconstruct_from_bit_planes,
+    reconstruct_cumulative_msb,
+    compute_bit_plane_metrics,
+    embed_watermark_lsb,
+    extract_watermark_lsb,
+    compute_mse_psnr,
+)
+from task_3_bit_plane_slicing.visualizer import (
+    create_rich_test_pattern,
+    create_watermark_pattern,
+    create_bit_plane_grid,
+    create_cumulative_reconstruction_grid,
+    create_steganography_grid,
+)
+
 import numpy as np
 from PIL import Image
 
@@ -133,6 +155,56 @@ def run_task_2(output_dir: str = "task_2_rgb_to_greyscale_conversion/outputs") -
         print(f"  -> Saved all greyscale variants and comparison grid: {grid_file}")
 
 
+def run_task_3(output_dir: str = "task_3_bit_plane_slicing/outputs") -> None:
+    print("\n" + "=" * 70)
+    print("🔬 RUNNING TASK 3: 8-BIT PLANE SLICING & DIGITAL STEGANOGRAPHY")
+    print("=" * 70)
+    os.makedirs(output_dir, exist_ok=True)
+
+    targets = [
+        ("test_pattern", create_rich_test_pattern(640, 480), "Calibrated Bit-Plane Decomposition Target"),
+        ("scenery", create_scenery_test_image(640, 480).convert("L"), "Photographic Scenery Target"),
+    ]
+
+    for prefix, img_pil, desc in targets:
+        print(f"\n• Processing: {desc}")
+        np_gray = np.array(img_pil)
+        width, height = img_pil.size
+
+        orig_file = f"{prefix}_original.png"
+        img_pil.save(os.path.join(output_dir, orig_file))
+
+        # Bit Planes
+        planes_scaled = extract_all_bit_planes(np_gray, scale_to_255=True)
+        for k in range(8):
+            plane_file = f"{prefix}_plane_{k}.png"
+            Image.fromarray(planes_scaled[k]).save(os.path.join(output_dir, plane_file))
+
+        # Composite Bit Planes Grid
+        grid_file = f"{prefix}_bit_planes_grid.png"
+        create_bit_plane_grid(img_pil, planes_scaled, output_path=os.path.join(output_dir, grid_file))
+
+        # Cumulative Multi-Bit Reconstruction Grid
+        cumul_results = reconstruct_cumulative_msb(np_gray)
+        recon_grid_file = f"{prefix}_cumulative_reconstruction_grid.png"
+        create_cumulative_reconstruction_grid(img_pil, cumul_results, output_path=os.path.join(output_dir, recon_grid_file))
+
+        # Steganography Demo
+        wm_pil = create_watermark_pattern(width, height, label="DIP LAB 2026")
+        wm_np = np.array(wm_pil)
+        wm_pil.save(os.path.join(output_dir, f"{prefix}_watermark_original.png"))
+
+        stego_np = embed_watermark_lsb(np_gray, wm_np, bit_plane=0)
+        Image.fromarray(stego_np).save(os.path.join(output_dir, f"{prefix}_stego_embedded.png"))
+
+        extracted_np = extract_watermark_lsb(stego_np, bit_plane=0, scale_to_255=True)
+        Image.fromarray(extracted_np).save(os.path.join(output_dir, f"{prefix}_extracted_watermark.png"))
+
+        stego_grid_file = f"{prefix}_steganography_demo.png"
+        create_steganography_grid(img_pil, wm_pil, stego_np, extracted_np, output_path=os.path.join(output_dir, stego_grid_file))
+        print(f"  -> Saved Bit Planes, Progressive Reconstruction, and Steganography grids: {prefix}")
+
+
 def main():
     start = time.perf_counter()
     print("=" * 70)
@@ -140,6 +212,7 @@ def main():
     print("=" * 70)
     run_task_1()
     run_task_2()
+    run_task_3()
     print(f"\n✨ All tasks executed successfully in {time.perf_counter() - start:.2f}s!\n")
 
 
