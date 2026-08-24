@@ -8,7 +8,7 @@
 
 **Author**: **Anuj Bajpayee** ([anujbajpayee14@gmail.com](mailto:anujbajpayee14@gmail.com))
 
-This repository contains the laboratory assignments and algorithmic implementations for Digital Image Processing (DIP) and Computational Algorithms. Each task is segregated into its own self-contained directory with dedicated code, extensive documentation, unit tests, and generated visual outputs.
+This repository contains the laboratory assignments and algorithmic implementations for Digital Image Processing (DIP) and Computational Algorithms. Each task is segregated into its own self-contained directory with dedicated code, documentation, unit tests, and generated visual outputs.
 
 ---
 
@@ -24,34 +24,15 @@ dip_lab_tasks/
 │   ├── visualizer.py                  # ASCII, Markdown, SVG, and PNG visual rendering with decade headers
 │   ├── main.py                        # Standalone CLI runner for Task 1
 │   ├── test_tambola.py                # Pytest unit tests for Task 1
-│   └── outputs/
-│       ├── sample_ticket_1.txt        # ASCII formatted ticket
-│       ├── sample_ticket_1.json       # JSON ticket payload
-│       ├── sample_ticket_1.svg        # Scalable Vector Graphics ticket card
-│       ├── sample_ticket_1.png        # High-resolution PNG ticket
-│       ├── sample_strip_of_6.txt      # 6-ticket strip containing numbers 1-90
-│       ├── sample_strip_of_6.json     # JSON strip payload
-│       └── algorithm_benchmark.txt    # Naive 0/1 mask rejection benchmark log
+│   └── outputs/                       # Generated sample tickets, JSON, SVG, PNG, strips, and logs
 │
 ├── task_2_rgb_to_greyscale_conversion/
-│   ├── README.md                      # Comprehensive guide on human vision, ITU-R standards, gamma
+│   ├── README.md                      # Human visual perception, ITU-R standards, gamma expansion
 │   ├── grayscale.py                   # ITU-R BT.601, BT.709, Average, Lightness, Gamma, Channels
 │   ├── visualizer.py                  # Calibration target synthesizer & 9-panel comparison grid with formulas
 │   ├── main.py                        # Standalone CLI runner for Task 2
 │   ├── test_grayscale.py              # Pytest unit tests for Task 2
-│   └── outputs/
-│       ├── color_chart_original_rgb.png     # Input RGB color test target
-│       ├── color_chart_rec601.png           # Rec.601 Luma output
-│       ├── color_chart_rec709.png           # Rec.709 Luma output
-│       ├── color_chart_average.png          # Simple Average output
-│       ├── color_chart_lightness.png        # HSL Lightness output
-│       ├── color_chart_gamma.png            # Linear Gamma-corrected output
-│       ├── color_chart_channel_red.png      # Red channel decomposition
-│       ├── color_chart_channel_green.png    # Green channel decomposition
-│       ├── color_chart_channel_blue.png     # Blue channel decomposition
-│       ├── color_chart_comparison_grid.png  # 9-Panel side-by-side comparison grid with formulas
-│       ├── scenery_original_rgb.png         # Input scenery image
-│       └── scenery_comparison_grid.png      # 9-Panel scenery comparison grid
+│   └── outputs/                       # Test charts, channel decompositions, and 9-panel comparison grids
 │
 ├── task_3_bit_plane_slicing/
 │   ├── README.md                      # 8-bit decomposition theory, visible input/output grids, steganography
@@ -59,23 +40,20 @@ dip_lab_tasks/
 │   ├── visualizer.py                  # Synthesizer for rich targets, watermarks & 9-panel composite grids
 │   ├── main.py                        # Standalone CLI runner for Task 3
 │   ├── test_bit_plane.py              # Pytest unit tests for Task 3
-│   └── outputs/
-│       ├── test_pattern_original.png  # Input calibrated test pattern
-│       ├── test_pattern_plane_0.png   # Bit plane 0 (LSB)
-│       ├── test_pattern_plane_7.png   # Bit plane 7 (MSB)
-│       ├── test_pattern_bit_planes_grid.png # 9-Panel bit plane decomposition grid
-│       ├── test_pattern_cumulative_reconstruction_grid.png # Progressive reconstruction grid
-│       ├── test_pattern_watermark_original.png # Binary watermark security emblem
-│       ├── test_pattern_stego_embedded.png # Stego carrier image (imperceptible LSB watermark)
-│       ├── test_pattern_extracted_watermark.png # Exact recovered watermark
-│       └── test_pattern_steganography_demo.png # 4-Panel steganography demonstration
+│   └── outputs/                       # Individual bit planes, progressive grids, and steganography demos
+│
+├── task_4_histogram_equalization/
+│   ├── README.md                      # Concise guide to HE types (GHE, BBHE, CLAHE, Matching, Color)
+│   ├── histogram.py                   # Vectorized NumPy implementation of all HE algorithms
+│   ├── visualizer.py                  # Synthesizer for low-contrast test scenes & histogram/CDF plots
+│   ├── main.py                        # Standalone CLI runner for Task 4
+│   ├── test_histogram.py              # Pytest unit tests for Task 4
+│   └── outputs/                       # Low-contrast before/after grids and histogram distribution graphs
 │
 ├── .github/
 │   ├── workflows/
 │   │   └── ci.yml                     # Multi-OS & Multi-Python CI workflow
 │   ├── ISSUE_TEMPLATE/
-│   │   ├── bug_report.md
-│   │   └── feature_request.md
 │   └── pull_request_template.md
 ├── .gitignore
 ├── LICENSE
@@ -85,7 +63,7 @@ dip_lab_tasks/
 ├── SECURITY.md
 ├── pyproject.toml
 ├── requirements.txt
-└── run_all.py                         # Single runner to execute all tasks & update all outputs
+└── run_all.py                         # Single runner to execute all 4 tasks & update all outputs
 ```
 
 ---
@@ -100,14 +78,19 @@ dip_lab_tasks/
 ### [Task 2: Standard RGB to Greyscale Image Conversion](task_2_rgb_to_greyscale_conversion/)
 - **Description**: Rigorous implementation of standard digital image processing algorithms for converting trichromatic RGB images to greyscale based on human retinal physiology (L, M, S cone sensitivities with peak photopic luminous efficiency $V(\lambda)$ at $555\text{ nm}$ green).
 - **Algorithms**: ITU-R BT.601, ITU-R BT.709 / sRGB, Simple Average, HSL Lightness / Desaturation, Linearized Gamma-Corrected Luma, and Single-Channel decompositions.
-- **Outputs**: Calibrated test target conversions and 9-panel side-by-side composite comparison grids with explicit mathematical formulas printed on each card.
+- **Outputs**: Calibrated test target conversions and 9-panel side-by-side composite comparison grids with explicit mathematical formulas.
 - **Detailed Documentation**: See [`task_2_rgb_to_greyscale_conversion/README.md`](task_2_rgb_to_greyscale_conversion/README.md).
 
 ### [Task 3: 8-Bit Plane Slicing & Digital Steganography](task_3_bit_plane_slicing/)
 - **Description**: Mathematical decomposition of 8-bit monochromatic images into 8 binary matrices (1-bit planes), isolating geometric structure in high-order bits (MSB) and fine texture/noise in low-order bits (LSB).
 - **Applications**: Selective multi-plane reconstruction, lossy image compression (50% bit reduction with $>94\%$ energy conservation), and imperceptible Least Significant Bit (LSB) digital watermarking/steganography ($\text{PSNR} > 50\text{ dB}$).
-- **Outputs**: Embedded input patterns, 9-panel bit-plane grids, cumulative progressive decoding grids, and steganography pipelines with operation labels.
+- **Outputs**: Embedded input patterns, 9-panel bit-plane grids, cumulative progressive decoding grids, and steganography pipelines.
 - **Detailed Documentation**: See [`task_3_bit_plane_slicing/README.md`](task_3_bit_plane_slicing/README.md).
+
+### [Task 4: Histogram Equalization Types & Execution](task_4_histogram_equalization/)
+- **Description**: Comprehensive practical suite of spatial contrast enhancement algorithms: Global Histogram Equalization (GHE), Brightness Preserving Bi-Histogram Equalization (BBHE), Contrast Limited Adaptive Histogram Equalization (CLAHE), Histogram Matching (Specification), and Color-Preserving HSV Equalization.
+- **Outputs**: Low-contrast before/after comparison grids with embedded 256-bin histogram and CDF distribution graphs.
+- **Detailed Documentation**: See [`task_4_histogram_equalization/README.md`](task_4_histogram_equalization/README.md).
 
 ---
 
@@ -127,7 +110,7 @@ source .venv/bin/activate    # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 2. Run All Tasks in One Command
+### 2. Run All 4 Tasks in One Command
 ```bash
 python run_all.py
 ```
@@ -144,6 +127,9 @@ python task_2_rgb_to_greyscale_conversion/main.py --generate-test-patterns
 
 # Task 3: Bit Plane Slicing & Steganography
 python task_3_bit_plane_slicing/main.py --generate-test-patterns
+
+# Task 4: Histogram Equalization Suite
+python task_4_histogram_equalization/main.py --generate-test-patterns
 ```
 
 ### 4. Run Automated Unit Tests
@@ -151,6 +137,7 @@ python task_3_bit_plane_slicing/main.py --generate-test-patterns
 pytest task_1_tambola_ticket_generator/test_tambola.py -v
 pytest task_2_rgb_to_greyscale_conversion/test_grayscale.py -v
 pytest task_3_bit_plane_slicing/test_bit_plane.py -v
+pytest task_4_histogram_equalization/test_histogram.py -v
 ```
 
 ---

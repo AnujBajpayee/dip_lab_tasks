@@ -2,8 +2,8 @@
 DIP Lab Tasks: Master Runner
 ============================
 Executes Task 1 (Tambola Ticket Generator), Task 2 (RGB-to-Greyscale Converter),
-and Task 3 (Bit Plane Slicing & Digital Steganography), populating all outputs
-and benchmarks in their respective dedicated folders.
+Task 3 (Bit Plane Slicing & Digital Steganography), and Task 4 (Histogram Equalization),
+populating all outputs and benchmarks in their respective dedicated folders.
 """
 
 from __future__ import annotations
@@ -61,6 +61,20 @@ from task_3_bit_plane_slicing.visualizer import (
     create_bit_plane_grid,
     create_cumulative_reconstruction_grid,
     create_steganography_grid,
+)
+
+# Task 4 Imports
+from task_4_histogram_equalization.histogram import (
+    global_histogram_equalization,
+    bi_histogram_equalization,
+    clahe,
+    histogram_matching,
+    color_histogram_equalization,
+)
+from task_4_histogram_equalization.visualizer import (
+    create_low_contrast_scene,
+    create_uneven_illumination_scene,
+    create_histogram_comparison_grid,
 )
 
 import numpy as np
@@ -205,6 +219,53 @@ def run_task_3(output_dir: str = "task_3_bit_plane_slicing/outputs") -> None:
         print(f"  -> Saved Bit Planes, Progressive Reconstruction, and Steganography grids: {prefix}")
 
 
+def run_task_4(output_dir: str = "task_4_histogram_equalization/outputs") -> None:
+    print("\n" + "=" * 70)
+    print("📈 RUNNING TASK 4: HISTOGRAM EQUALIZATION TYPES & EXECUTION")
+    print("=" * 70)
+    os.makedirs(output_dir, exist_ok=True)
+
+    # 1. Low Contrast Scene
+    low_scene = create_low_contrast_scene(640, 480)
+    np_low = np.array(low_scene)
+    low_scene.save(os.path.join(output_dir, "low_contrast_original.png"))
+
+    low_eqs = {
+        "Global HE (GHE)": global_histogram_equalization(np_low),
+        "Bi-Histogram Equalization (BBHE)": bi_histogram_equalization(np_low),
+        "CLAHE (Adaptive Local)": clahe(np_low, clip_limit=2.5, tile_grid_size=(8, 8)),
+        "Histogram Matching": histogram_matching(np_low, np.linspace(0, 255, 256, dtype=np.uint8)),
+    }
+    create_histogram_comparison_grid(low_scene, low_eqs, output_path=os.path.join(output_dir, "low_contrast_comparison_grid.png"))
+
+    # 2. Uneven Illumination Scene
+    uneven_scene = create_uneven_illumination_scene(640, 480)
+    np_uneven = np.array(uneven_scene)
+    uneven_scene.save(os.path.join(output_dir, "uneven_illumination_original.png"))
+
+    uneven_eqs = {
+        "Global HE (GHE)": global_histogram_equalization(np_uneven),
+        "Bi-Histogram Equalization (BBHE)": bi_histogram_equalization(np_uneven),
+        "CLAHE (Adaptive Local)": clahe(np_uneven, clip_limit=2.5, tile_grid_size=(8, 8)),
+        "Histogram Matching": histogram_matching(np_uneven, np.linspace(0, 255, 256, dtype=np.uint8)),
+    }
+    create_histogram_comparison_grid(uneven_scene, uneven_eqs, output_path=os.path.join(output_dir, "uneven_illumination_comparison_grid.png"))
+
+    # 3. Color Haze Landscape
+    color_scene = create_scenery_test_image(640, 480)
+    np_scenery = np.clip(np.array(color_scene).astype(np.float64) * 0.4 + 50, 0, 255).astype(np.uint8)
+    color_hazy = Image.fromarray(np_scenery)
+    color_hazy.save(os.path.join(output_dir, "color_haze_original_rgb.png"))
+
+    color_eqs = {
+        "Global HE (GHE)": color_histogram_equalization(np_scenery, method="ghe"),
+        "Bi-Histogram Equalization (BBHE)": color_histogram_equalization(np_scenery, method="bbhe"),
+        "Color HSV Equalization": color_histogram_equalization(np_scenery, method="clahe", clip_limit=2.5, tile_grid_size=(8, 8)),
+    }
+    create_histogram_comparison_grid(color_hazy, color_eqs, output_path=os.path.join(output_dir, "color_haze_comparison_grid.png"))
+    print("  -> Saved Low-Contrast, Uneven Illumination, and Color Haze Equalization grids in task 4 outputs.")
+
+
 def main():
     start = time.perf_counter()
     print("=" * 70)
@@ -213,6 +274,7 @@ def main():
     run_task_1()
     run_task_2()
     run_task_3()
+    run_task_4()
     print(f"\n✨ All tasks executed successfully in {time.perf_counter() - start:.2f}s!\n")
 
 
