@@ -54,11 +54,11 @@ Applied to natural continuous photographic scenes:
 
 An 8-bit pixel value $f(x, y) \in [0, 255]$ at spatial coordinate $(x, y)$ is expressed in base-2 positional notation as:
 
-$$f(x, y) = \sum_{k=0}^{7} b_k(x, y) \cdot 2^k = b_7 \cdot 2^7 + b_6 \cdot 2^6 + b_5 \cdot 2^5 + b_4 \cdot 2^4 + b_3 \cdot 2^3 + b_2 \cdot 2^2 + b_1 \cdot 2^1 + b_0 \cdot 2^0$$
+$$f(x, y) = \sum_{k=0}^{7} b_k(x, y) \cdot 2^k = b_7 \cdot 128 + b_6 \cdot 64 + b_5 \cdot 32 + b_4 \cdot 16 + b_3 \cdot 8 + b_2 \cdot 4 + b_1 \cdot 2 + b_0 \cdot 1$$
 
 where $b_k(x, y) \in \{0, 1\}$ represents the binary state of the $k$-th bit.
 
-```
+```text
 Byte Layout:
 ┌───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┐
 │ Bit 7 │ Bit 6 │ Bit 5 │ Bit 4 │ Bit 3 │ Bit 2 │ Bit 1 │ Bit 0 │
@@ -71,7 +71,7 @@ Byte Layout:
 ### 1.1 Bit Plane Extraction Formula
 The $k$-th bit plane is computed through bitwise right-shift and masking:
 
-$$b_k(x, y) = \left\lfloor \frac{f(x, y)}{2^k} \right\rfloor \pmod 2 = (f(x, y) \gg k) \ \& \ 1$$
+$$b_k(x, y) = \left\lfloor \frac{f(x, y)}{2^k} \right\rfloor \bmod 2 = (f(x, y) \gg k) \ \& \ 1$$
 
 For visual display, the binary values $\{0, 1\}$ are scaled to dynamic range $[0, 255]$:
 
@@ -97,18 +97,20 @@ $$I_k(x, y) = 255 \cdot b_k(x, y)$$
 ## ⚙️ 3. Core Applications
 
 ### 3.1 Lossy Image Compression (Bit Reduction)
-By retaining only the 4 most significant bit planes ($b_7, b_6, b_5, b_4$) and setting $b_3 = b_2 = b_1 = b_0 = 0$:
+By retaining only the 4 most significant bit planes ($b_7, b_6, b_5, b_4$) and setting lower bits to 0:
 - Storage footprint drops by **$50\%$** ($4\text{ bits/pixel}$ vs $8\text{ bits/pixel}$).
 - Reconstruction retains **$>94\%$ energy** with **$\text{PSNR} > 31.8\text{ dB}$**.
 
-### 3.2 LSB Digital Steganography (Data Hiding)
-Since modifying Bit 0 alters pixel luminance by at most $\pm 1$ level ($\le 0.39\%$), the human visual system (HVS) cannot perceive the embedded data:
+$$\hat{f}_{7..4}(x, y) = \sum_{k=4}^{7} 2^k \cdot b_k(x, y)$$
 
-$$\text{Stego}(x, y) = \Big( \text{Cover}(x, y) \ \& \ \sim(1 \ll k) \Big) \ \Big| \ \Big( \text{Watermark}(x, y) \ll k \Big)$$
+### 3.2 LSB Digital Steganography (Data Hiding)
+Since modifying Bit 0 alters pixel luminance by at most $\pm 1$ level ($\le 0.39\%$), the human visual system cannot perceive the embedded data:
+
+$$\text{Stego}(x, y) = \left( \text{Cover}(x, y) \ \& \ \sim 1 \right) \mid \left( \text{Watermark}(x, y) \ \& \ 1 \right)$$
 
 Extraction is exact and lossless:
 
-$$\text{Extracted}(x, y) = (\text{Stego}(x, y) \gg k) \ \& \ 1$$
+$$\text{Extracted}(x, y) = \text{Stego}(x, y) \ \& \ 1$$
 
 ---
 
@@ -116,7 +118,7 @@ $$\text{Extracted}(x, y) = (\text{Stego}(x, y) \gg k) \ \& \ 1$$
 
 ### Files in this Module:
 - [`bit_plane.py`](bit_plane.py): Core mathematical extraction, multi-plane reconstruction, and steganography engine.
-- [`visualizer.py`](visualizer.py): Calibrated test target synthesizer, watermark generator, and composite grid visualizers.
+- [`visualizer.py`](visualizer.py): Calibrated test target synthesizer, watermark generator, and composite grid visualizers with formula annotations.
 - [`main.py`](main.py): CLI interface for running bit-plane slicing, metrics logging, and watermark embedding.
 - [`test_bit_plane.py`](test_bit_plane.py): Comprehensive Pytest unit test suite.
 - [`outputs/`](outputs/): Directory containing all generated outputs and composite visualizers.

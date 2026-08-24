@@ -3,7 +3,7 @@
 
 ## 📖 Overview
 
-Transforming a three-channel trichromatic ($RGB$) digital image into a single-channel monochromatic (greyscale) representation is one of the cornerstone techniques in digital image processing, computer vision, and visual neuroscience. 
+Transforming a three-channel trichromatic ($RGB$) digital image into a single-channel monochromatic (greyscale) representation is one of the cornerstone techniques in digital image processing, computer vision, and visual neuroscience.
 
 This module provides a scientific and engineering implementation of all standard greyscale conversion algorithms, including:
 1. **ITU-R Recommendation BT.601** (Standard Definition Video / PAL / NTSC)
@@ -15,11 +15,29 @@ This module provides a scientific and engineering implementation of all standard
 
 ---
 
+## 🖼️ Visual Demonstrations & Algorithmic Comparison
+
+### 1. Calibrated Color Test Target Benchmark
+
+Below is the side-by-side 9-panel benchmark grid on a calibrated color palette, showing exact transformation formulas and visual responses across primary, secondary, and skin tones:
+
+![Calibrated Color Target Comparison Grid](outputs/color_chart_comparison_grid.png)
+
+---
+
+### 2. Natural Photographic Scenery Benchmark
+
+Applied to continuous landscape scenery:
+
+![Photographic Scenery Comparison Grid](outputs/scenery_comparison_grid.png)
+
+---
+
 ## 👁️ 1. Human Visual Perception & Biological Foundations
 
 Human vision does **not** perceive all wavelengths of visible light with equal brightness. Color perception is mediated by three classes of retinal cone photoreceptors:
 
-```
+```text
                             HUMAN RETINA
                                   │
                  ┌────────────────┴────────────────┐
@@ -45,17 +63,13 @@ Standardized by CIE (1931), the photopic luminous efficiency curve shows peak hu
 
 ## 📐 2. Mathematical Formulations & Standards
 
-```
-+-----------------------------------------------------------------------------------------------+
-| Method                | Formula                                                 | Standard     |
-| --------------------------------------------------------------------------------------------- |
-| ITU-R BT.601 Luma     | Y = 0.299*R + 0.587*G + 0.114*B                        | SDTV / NTSC  |
-| ITU-R BT.709 Luma     | Y = 0.2126*R + 0.7152*G + 0.0722*B                     | HDTV / sRGB  |
-| Simple Average        | Y = (R + G + B) / 3                                    | Naive Mean   |
-| HSL Lightness         | Y = (max(R,G,B) + min(R,G,B)) / 2                      | Desaturation |
-| Gamma-Corrected Luma  | Y = 255 * (0.2126*R_lin + 0.7152*G_lin + 0.0722*B_lin)^(1/gamma) | Perceptual |
-+-----------------------------------------------------------------------------------------------+
-```
+| Method | Formula | Standard / Application |
+| :--- | :--- | :--- |
+| **ITU-R BT.601 Luma** | $Y = 0.299 \cdot R + 0.587 \cdot G + 0.114 \cdot B$ | SDTV / NTSC / PAL |
+| **ITU-R BT.709 Luma** | $Y = 0.2126 \cdot R + 0.7152 \cdot G + 0.0722 \cdot B$ | HDTV / sRGB Displays |
+| **Simple Average** | $Y = \frac{R + G + B}{3}$ | Naive Unweighted Mean |
+| **HSL Lightness** | $Y = \frac{\max(R, G, B) + \min(R, G, B)}{2}$ | Desaturation / HSL Model |
+| **Gamma-Corrected Luma** | $Y = 255 \cdot \left(0.2126 R_{\text{lin}} + 0.7152 G_{\text{lin}} + 0.0722 B_{\text{lin}}\right)^{1/\gamma}$ | Radiometric Energy Conservation |
 
 ### 2.1 ITU-R BT.601 (SDTV Standard)
 $$Y_{601} = 0.299 \cdot R + 0.587 \cdot G + 0.114 \cdot B$$
@@ -97,7 +111,7 @@ True physical energy conservation requires:
 
 ### Files in this Module:
 - [`grayscale.py`](grayscale.py): Core conversion algorithms implemented in vectorized NumPy with pure Python fallbacks.
-- [`visualizer.py`](visualizer.py): Calibrated color target synthesizer, landscape generator, and side-by-side 9-panel composite grid visualizer.
+- [`visualizer.py`](visualizer.py): Calibrated color target synthesizer, landscape generator, and side-by-side 9-panel composite grid visualizer with mathematical formulas.
 - [`main.py`](main.py): CLI interface for image conversion and statistical reporting.
 - [`test_grayscale.py`](test_grayscale.py): Pytest unit test suite.
 - [`outputs/`](outputs/): Output pictures for all conversion variants and side-by-side comparison grids.
@@ -119,15 +133,5 @@ pytest task_2_rgb_to_greyscale_conversion/test_grayscale.py -v
 
 ---
 
-## 🖼️ 5. Generated Output Pictures
-
-All generated images are organized in [`outputs/`](outputs/):
-- `color_chart_original_rgb.png` (Original RGB target)
-- `color_chart_rec601.png` (ITU-R Rec. 601)
-- `color_chart_rec709.png` (ITU-R Rec. 709)
-- `color_chart_average.png` (Simple Average)
-- `color_chart_lightness.png` (HSL Lightness)
-- `color_chart_gamma.png` (Gamma-Corrected Linear Luma)
-- `color_chart_comparison_grid.png` (9-Panel side-by-side composite grid)
-- `scenery_original_rgb.png` (Landscape scenery)
-- `scenery_comparison_grid.png` (9-Panel landscape comparison grid)
+## 📜 License
+This task is part of `dip_lab_tasks` licensed under the **MIT License**.

@@ -4,8 +4,8 @@ Tambola Ticket Visualizers & Export Utilities
 Provides multi-format rendering for Tambola tickets:
 - ASCII box-drawing text format
 - GitHub Flavored Markdown tables
-- Scalable Vector Graphics (SVG)
-- Raster PNG images (via Pillow)
+- Scalable Vector Graphics (SVG) with decade column annotations
+- High-resolution Raster PNG images with styled column headers
 """
 
 from __future__ import annotations
@@ -20,13 +20,19 @@ except ImportError:
     HAS_PILLOW = False
 
 
+COLUMN_DECADE_LABELS = [
+    "1-9", "10-19", "20-29", "30-39", "40-49",
+    "50-59", "60-69", "70-79", "80-90"
+]
+
+
 def ticket_to_ascii(ticket: TambolaTicket, title: Optional[str] = None) -> str:
     """Renders a 3x9 Tambola ticket in a formatted ASCII box-drawing table."""
     t_id = title or ticket.ticket_id or "TAMBOLA TICKET"
     header = f"┌─────────────────────────────────────────────────────┐\n"
     header += f"│ {t_id.center(51)} │\n"
     header += f"├─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┤\n"
-    header += f"│  1s │ 10s │ 20s │ 30s │ 40s │ 50s │ 60s │ 70s │ 80s │\n"
+    header += f"│ 1-9 │10-19│20-29│30-39│40-49│50-59│60-69│70-79│80-90│\n"
     header += f"├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤\n"
     
     rows_str = []
@@ -86,14 +92,15 @@ def ticket_to_svg(
     title: Optional[str] = None,
     output_path: Optional[str] = None
 ) -> str:
-    """Renders a Tambola ticket into a modern SVG vector graphic."""
+    """Renders a Tambola ticket into a modern SVG vector graphic with column decade annotations."""
     t_id = title or ticket.ticket_id or "TAMBOLA TICKET"
-    width = 720
-    height = 290
-    cell_w = 70
+    width = 760
+    height = 320
+    cell_w = 72
     cell_h = 60
-    start_x = 45
-    start_y = 75
+    start_x = 55
+    header_y = 70
+    start_y = 100
 
     svg_parts = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}">',
@@ -110,8 +117,17 @@ def ticket_to_svg(
         f'  <!-- Card Background -->',
         f'  <rect x="15" y="15" width="{width-30}" height="{height-30}" rx="16" fill="url(#cardBg)" stroke="#334155" stroke-width="2"/>',
         f'  <!-- Title -->',
-        f'  <text x="{width/2}" y="48" fill="#f8fafc" font-family="system-ui, -apple-system, sans-serif" font-size="18" font-weight="700" text-anchor="middle" letter-spacing="2">{t_id.upper()}</text>',
+        f'  <text x="{width/2}" y="42" fill="#f8fafc" font-family="system-ui, -apple-system, sans-serif" font-size="17" font-weight="700" text-anchor="middle" letter-spacing="2">{t_id.upper()}</text>',
+        f'  <text x="{width/2}" y="60" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11" text-anchor="middle">Standard 3x9 Matrix • 15 Numbers • 5 Numbers per Row • Ascending Columns</text>',
     ]
+
+    # Column Decade Headers
+    for c in range(9):
+        cx = start_x + c * cell_w + cell_w / 2
+        label = COLUMN_DECADE_LABELS[c]
+        svg_parts.append(
+            f'  <text x="{cx}" y="{header_y + 16}" fill="#64748b" font-family="system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">{label}</text>'
+        )
 
     for r in range(3):
         for c in range(9):
@@ -150,16 +166,17 @@ def ticket_to_png(
     output_path: str,
     title: Optional[str] = None
 ) -> None:
-    """Renders a Tambola ticket into a high-resolution PNG image using Pillow."""
+    """Renders a Tambola ticket into a high-resolution PNG image with styled column headers."""
     if not HAS_PILLOW:
         raise ImportError("Pillow is required for PNG rendering.")
         
-    width = 900
-    height = 380
-    cell_w = 90
+    width = 960
+    height = 420
+    cell_w = 94
     cell_h = 80
-    start_x = 45
-    start_y = 100
+    start_x = 55
+    header_y = 80
+    start_y = 120
 
     img = Image.new("RGB", (width, height), color=(15, 23, 42))
     draw = ImageDraw.Draw(img)
@@ -168,13 +185,24 @@ def ticket_to_png(
     t_id = title or ticket.ticket_id or "TAMBOLA TICKET"
     
     try:
-        font_title = ImageFont.load_default(size=24)
+        font_title = ImageFont.load_default(size=22)
+        font_sub = ImageFont.load_default(size=13)
+        font_col = ImageFont.load_default(size=14)
         font_cell = ImageFont.load_default(size=28)
     except Exception:
         font_title = ImageFont.load_default()
+        font_sub = ImageFont.load_default()
+        font_col = ImageFont.load_default()
         font_cell = ImageFont.load_default()
 
-    draw.text((width // 2, 45), t_id.upper(), fill=(248, 250, 252), font=font_title, anchor="mm")
+    draw.text((width // 2, 40), t_id.upper(), fill=(248, 250, 252), font=font_title, anchor="mm")
+    draw.text((width // 2, 65), "Standard 3x9 Matrix • 15 Numbers • 5 Numbers per Row • Ascending Order", fill=(148, 163, 184), font=font_sub, anchor="mm")
+
+    # Column Range Headers
+    for c in range(9):
+        cx = start_x + c * cell_w + cell_w // 2
+        label = COLUMN_DECADE_LABELS[c]
+        draw.text((cx, header_y + 18), label, fill=(100, 116, 139), font=font_col, anchor="mm")
 
     for r in range(3):
         for c in range(9):

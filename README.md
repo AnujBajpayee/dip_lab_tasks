@@ -21,7 +21,7 @@ dip_lab_tasks/
 │   ├── README.md                      # Complete description of rules, naive 0/1 array analysis & CSP
 │   ├── generator.py                   # Single ticket & 6-ticket strip (1-90) CSP engine
 │   ├── naive_generator.py             # Naive 0/1 random array generator & Monte Carlo profiler
-│   ├── visualizer.py                  # ASCII, Markdown, SVG, and PNG visual rendering
+│   ├── visualizer.py                  # ASCII, Markdown, SVG, and PNG visual rendering with decade headers
 │   ├── main.py                        # Standalone CLI runner for Task 1
 │   ├── test_tambola.py                # Pytest unit tests for Task 1
 │   └── outputs/
@@ -36,7 +36,7 @@ dip_lab_tasks/
 ├── task_2_rgb_to_greyscale_conversion/
 │   ├── README.md                      # Comprehensive guide on human vision, ITU-R standards, gamma
 │   ├── grayscale.py                   # ITU-R BT.601, BT.709, Average, Lightness, Gamma, Channels
-│   ├── visualizer.py                  # Calibration target synthesizer & 9-panel comparison grid
+│   ├── visualizer.py                  # Calibration target synthesizer & 9-panel comparison grid with formulas
 │   ├── main.py                        # Standalone CLI runner for Task 2
 │   ├── test_grayscale.py              # Pytest unit tests for Task 2
 │   └── outputs/
@@ -49,7 +49,7 @@ dip_lab_tasks/
 │       ├── color_chart_channel_red.png      # Red channel decomposition
 │       ├── color_chart_channel_green.png    # Green channel decomposition
 │       ├── color_chart_channel_blue.png     # Blue channel decomposition
-│       ├── color_chart_comparison_grid.png  # 9-Panel side-by-side comparison grid
+│       ├── color_chart_comparison_grid.png  # 9-Panel side-by-side comparison grid with formulas
 │       ├── scenery_original_rgb.png         # Input scenery image
 │       └── scenery_comparison_grid.png      # 9-Panel scenery comparison grid
 │
@@ -93,20 +93,20 @@ dip_lab_tasks/
 ## 🎯 Task Summaries
 
 ### [Task 1: Tambola (Housie) Ticket Generator](task_1_tambola_ticket_generator/)
-- **Description**: Detailed analysis of how a standard $3 \times 9$ Tambola ticket is constructed with 15 numbers, 5 numbers per row, column range constraints (Col 0: $1-9$, ..., Col 8: $80-90$), and vertical ascending sorting.
-- **The 0/1 Random Array Journey**: Documents how initial naive random binary arrays ($0\text{s}$ and $1\text{s}$) suffer $\approx 28.5\% - 62.4\%$ rejection rates due to column starvation, and how we evolved to a deterministic **Constraint-Satisfaction bipartite matching engine** capable of generating full $6$-ticket strips using numbers $1-90$ with zero collisions or omissions.
+- **Description**: Detailed analysis of how a standard $3 \times 9$ Tambola ticket is constructed with 15 numbers, 5 numbers per row, column range constraints (Col 0: $[1, 9]$, ..., Col 8: $[80, 90]$), and vertical ascending sorting.
+- **The 0/1 Random Array Journey**: Documents how initial naive random binary arrays suffer $\approx 28.5\% - 62.4\%$ rejection rates due to column starvation, and how we evolved to a deterministic **Constraint-Satisfaction bipartite matching engine** capable of generating full 6-ticket strips using numbers $1 \dots 90$ with zero collisions or omissions.
 - **Detailed Documentation**: See [`task_1_tambola_ticket_generator/README.md`](task_1_tambola_ticket_generator/README.md).
 
 ### [Task 2: Standard RGB to Greyscale Image Conversion](task_2_rgb_to_greyscale_conversion/)
 - **Description**: Rigorous implementation of standard digital image processing algorithms for converting trichromatic RGB images to greyscale based on human retinal physiology (L, M, S cone sensitivities with peak photopic luminous efficiency $V(\lambda)$ at $555\text{ nm}$ green).
 - **Algorithms**: ITU-R BT.601, ITU-R BT.709 / sRGB, Simple Average, HSL Lightness / Desaturation, Linearized Gamma-Corrected Luma, and Single-Channel decompositions.
-- **Outputs**: Calibrated test target conversions and 9-panel side-by-side composite comparison grids.
+- **Outputs**: Calibrated test target conversions and 9-panel side-by-side composite comparison grids with explicit mathematical formulas printed on each card.
 - **Detailed Documentation**: See [`task_2_rgb_to_greyscale_conversion/README.md`](task_2_rgb_to_greyscale_conversion/README.md).
 
 ### [Task 3: 8-Bit Plane Slicing & Digital Steganography](task_3_bit_plane_slicing/)
 - **Description**: Mathematical decomposition of 8-bit monochromatic images into 8 binary matrices (1-bit planes), isolating geometric structure in high-order bits (MSB) and fine texture/noise in low-order bits (LSB).
 - **Applications**: Selective multi-plane reconstruction, lossy image compression (50% bit reduction with $>94\%$ energy conservation), and imperceptible Least Significant Bit (LSB) digital watermarking/steganography ($\text{PSNR} > 50\text{ dB}$).
-- **Outputs**: Embedded input patterns, 9-panel bit-plane grids, cumulative progressive decoding grids, and steganography pipelines.
+- **Outputs**: Embedded input patterns, 9-panel bit-plane grids, cumulative progressive decoding grids, and steganography pipelines with operation labels.
 - **Detailed Documentation**: See [`task_3_bit_plane_slicing/README.md`](task_3_bit_plane_slicing/README.md).
 
 ---

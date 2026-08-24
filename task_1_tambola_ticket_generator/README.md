@@ -3,32 +3,40 @@
 
 ## 📖 Overview
 
-Tambola (also known as Housie or 90-Ball Bingo) is a probability-based number game widely played across the world. While generating a basic grid might seem trivial at first glance, generating a **mathematically valid Tambola ticket** involves strict combinatorial constraints across rows, columns, and decade ranges.
+Tambola (also known as Housie or 90-Ball Bingo) is a probability-based game widely played across the world. While generating a basic grid might seem straightforward, generating a **mathematically valid Tambola ticket** involves strict combinatorial constraints across rows, columns, and decade ranges.
 
 This document describes:
-1. The **official structural rules & mathematical invariants** of a Tambola ticket.
-2. The **naive approach**: Attempting to generate tickets using a random binary array of only $1\text{s}$ and $0\text{s}$, and a detailed mathematical breakdown of why this approach fails.
-3. The **algorithmic evolution**: How we transitioned from the naive $0/1$ model to a **deterministic constraint-satisfaction engine** capable of generating valid single tickets and complete $6$-ticket strips containing all numbers $1 \dots 90$ with zero collisions or omissions.
+1. The **official structural rules and mathematical invariants** of a Tambola ticket.
+2. The **naive approach**: Attempting to generate tickets using a random binary array of 0s and 1s, and a detailed mathematical breakdown of why this approach fails.
+3. The **algorithmic evolution**: How we transitioned from the naive model to a **deterministic constraint-satisfaction engine** capable of generating valid single tickets and complete 6-ticket strips containing all numbers $1 \dots 90$ with zero collisions or omissions.
+
+---
+
+## 🎟️ Visual Sample Output
+
+Below is an automatically generated valid Tambola ticket rendered with decade headers and constraint validation:
+
+![Sample Tambola Ticket Card](outputs/sample_ticket_1.png)
 
 ---
 
 ## 🎯 1. Official Tambola Ticket Rules & Invariants
 
-A standard Tambola ticket is represented as a $3 \times 9$ integer matrix $\mathbf{M} \in (\mathbb{N}_0)^{3 \times 9}$ that strictly satisfies seven invariants:
+A standard Tambola ticket is represented as a $3 \times 9$ integer matrix $\mathbf{M} \in \mathbb{N}_0^{3 \times 9}$ that strictly satisfies seven invariants:
 
 | # | Invariant Rule | Mathematical Formulation | Description |
 | :-: | :--- | :--- | :--- |
 | **1** | **Grid Dimensions** | $\text{dim}(\mathbf{M}) = 3 \times 9$ | Exactly 3 rows and 9 columns (27 total cells). |
 | **2** | **Row Numbers Count** | $\forall i \in \{0, 1, 2\}: \sum_{j=0}^{8} \mathbb{I}(M_{i, j} > 0) = 5$ | Exactly 5 numbers and 4 blank spaces per row. |
 | **3** | **Total Numbers** | $\sum_{i=0}^{2} \sum_{j=0}^{8} \mathbb{I}(M_{i, j} > 0) = 15$ | Exactly 15 numbers (12 blanks) per ticket. |
-| **4** | **Column Capacity** | $\forall j \in \{0, \dots, 8\}: 1 \le \sum_{i=0}^{2} \mathbb{I}(M_{i, j} > 0) \le 3$ | Every column must have at least 1 number and at most 3 numbers (no empty columns). |
-| **5** | **Decade Column Ranges** | $\text{Col } j \in \mathcal{D}_j$ | Col 0: $[1, 9]$, Col 1: $[10, 19]$, ..., Col 7: $[70, 79]$, Col 8: $[80, 90]$. |
-| **6** | **Vertical Ascending Order** | $\forall j, i_1 < i_2 \implies M_{i_1, j} < M_{i_2, j}$ | Numbers in each column must strictly increase from top to bottom. |
-| **7** | **No Duplicates** | $|\{M_{i, j} \mid M_{i, j} > 0\}| = 15$ | All 15 numbers on a ticket must be distinct. |
+| **4** | **Column Capacity** | $\forall j \in \{0, \dots, 8\}: 1 \le \sum_{i=0}^{2} \mathbb{I}(M_{i, j} > 0) \le 3$ | Every column must have at least 1 and at most 3 numbers. |
+| **5** | **Decade Column Ranges** | $\text{Col } j \in \mathcal{D}_j$ | Col 0: $[1, 9]$, Col 1: $[10, 19]$, ..., Col 8: $[80, 90]$. |
+| **6** | **Vertical Ascending Order** | $\forall j, i_1 < i_2 \implies M_{i_1, j} < M_{i_2, j}$ | Numbers in each column must increase from top to bottom. |
+| **7** | **No Duplicates** | $\text{Card}(\{M_{i, j} : M_{i, j} > 0\}) = 15$ | All 15 numbers on a ticket must be unique. |
 
 ---
 
-## 🛑 2. The Naive Approach: Random Binary Mask ($1\text{s}$ and $0\text{s}$)
+## 🛑 2. The Naive Approach: Random Binary Mask (0s and 1s)
 
 ### 2.1 The Mental Model
 The simplest intuition is to represent the ticket layout as a **binary mask matrix** $\mathbf{B} \in \{0, 1\}^{3 \times 9}$:
@@ -46,7 +54,7 @@ for row in range(3):
         mask[row][col] = 1
 ```
 
-```
+```text
 Sample Naively Generated Binary Mask (0s and 1s):
 Row 0: [ 1,  0,  1,  0,  1,  1,  0,  1,  0 ]  -> Sum = 5 (Valid)
 Row 1: [ 0,  1,  1,  1,  0,  1,  0,  0,  1 ]  -> Sum = 5 (Valid)
@@ -62,19 +70,22 @@ While row sums are guaranteed to be 5, **column constraints are completely ignor
 
 #### Mathematical Proof of Failure Rate:
 For any single column $c$ in a single row, the probability of *not* selecting column $c$ when choosing 5 columns out of 9 is:
-$$P(\text{column } c \text{ is } 0 \text{ in a row}) = \frac{\binom{8}{5}}{\binom{9}{5}} = \frac{56}{126} = \frac{4}{9} \approx 0.4444$$
+
+$$P(\text{column } c = 0 \text{ in row } r) = \frac{\binom{8}{5}}{\binom{9}{5}} = \frac{56}{126} = \frac{4}{9} \approx 0.4444$$
 
 Since the three rows in the naive model are generated independently, the probability that column $c$ is empty across all 3 rows is:
+
 $$P(\text{column } c \text{ is empty}) = \left(\frac{4}{9}\right)^3 = \frac{64}{729} \approx 0.08779 \quad (8.78\%)$$
 
 Across all 9 columns, using the Principle of Inclusion-Exclusion (PIE):
+
 $$P(\text{at least one empty column}) \approx 9 \times 0.08779 - \binom{9}{2} \times \left(\frac{\binom{7}{5}}{\binom{9}{5}}\right)^3 \approx \mathbf{28.5\%}$$
 
 In empirical Monte-Carlo testing with 10,000 trials, the naive binary mask fails **$\approx 28.5\% - 33.4\%$ of the time** for single tickets.
 
 ### 2.3 The Strip Generation Breakdown
 A full Tambola set consists of **6 tickets (a strip)** that must contain all numbers $1 \dots 90$ exactly once.
-If one tries to use naive random binary masks to partition numbers $1-90$, the probability of satisfying all column capacities simultaneously across 6 tickets collapses to **$< 0.01\%$**, leading to catastrophic rejection sampling and infinite loops.
+If one tries to use naive random binary masks to partition numbers $1 \dots 90$, the probability of satisfying all column capacities simultaneously across 6 tickets collapses to **$< 0.01\%$**, leading to catastrophic rejection sampling and infinite loops.
 
 ---
 
@@ -114,10 +125,10 @@ For a full strip of 6 tickets, the column pools are partitioned deterministicall
 ## 💻 4. Code Structure & Usage
 
 ### Files in this Module:
-- [`generator.py`](generator.py): Production constraint-satisfaction single ticket & 6-ticket strip generator and validator.
-- [`naive_generator.py`](naive_generator.py): Naive 0/1 binary array model & Monte Carlo benchmark profiler.
-- [`visualizer.py`](visualizer.py): Visual rendering to ASCII, Markdown, SVG, and PNG.
-- [`main.py`](main.py): CLI interface.
+- [`generator.py`](generator.py): Production constraint-satisfaction single ticket and 6-ticket strip generator and validator.
+- [`naive_generator.py`](naive_generator.py): Naive 0/1 binary array model and Monte Carlo benchmark profiler.
+- [`visualizer.py`](visualizer.py): Visual rendering to ASCII, Markdown, SVG, and PNG with column decade annotations.
+- [`main.py`](main.py): Standalone CLI interface.
 - [`test_tambola.py`](test_tambola.py): Pytest unit test suite.
 - [`outputs/`](outputs/): Generated sample tickets, JSON, SVG, PNG, strips, and benchmark logs.
 
@@ -131,7 +142,7 @@ python task_1_tambola_ticket_generator/main.py --ticket
 python task_1_tambola_ticket_generator/main.py --strip
 
 # 3. Export SVG and PNG visuals
-python task_1_tambola_ticket_generator/main.py --ticket --export-svg task_1_tambola_ticket_generator/outputs/ticket.svg --export-png task_1_tambola_ticket_generator/outputs/ticket.png
+python task_1_tambola_ticket_generator/main.py --ticket --export-svg task_1_tambola_ticket_generator/outputs/sample_ticket_1.svg --export-png task_1_tambola_ticket_generator/outputs/sample_ticket_1.png
 
 # 4. Run the Naive 0/1 Mask Rejection Benchmark (10,000 trials)
 python task_1_tambola_ticket_generator/main.py --benchmark --trials 10000
@@ -144,18 +155,5 @@ pytest task_1_tambola_ticket_generator/test_tambola.py -v
 
 ---
 
-## 🎟️ 5. Sample Output Preview
-
-```
-┌─────────────────────────────────────────────────────┐
-│                    TKT-2026-ALPHA                   │
-├─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┤
-│  1s │ 10s │ 20s │ 30s │ 40s │ 50s │ 60s │ 70s │ 80s │
-├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
-│     │     │     │ 34  │     │ 52  │ 69  │ 70  │ 85  │
-├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
-│  2  │     │ 21  │ 38  │     │ 57  │     │     │ 90  │
-├─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┼─────┤
-│  9  │ 15  │ 28  │     │ 44  │     │     │ 74  │     │
-└─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┘
-```
+## 📜 License
+This task is part of `dip_lab_tasks` licensed under the **MIT License**.
