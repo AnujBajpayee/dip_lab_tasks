@@ -1,7 +1,7 @@
 # Digital Image Processing & Algorithmic Lab Tasks (`dip_lab_tasks`) 🚀
 
 [![CI Pipeline](https://github.com/anujbajpayee14/dip_lab_tasks/actions/workflows/ci.yml/badge.svg)](https://github.com/anujbajpayee14/dip_lab_tasks/actions)
-[![Web Workstation](https://img.shields.io/badge/Web%20App-Interactive%20Workstation-6366f1.svg?logo=flask&logoColor=white)](http://127.0.0.1:5000)
+[![Live Interactive Web App](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages%20App-6366f1.svg?logo=github&logoColor=white)](https://anujbajpayee.github.io/dip_lab_tasks/)
 [![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code Style: PEP 8](https://img.shields.io/badge/code%20style-PEP%208-green.svg)](https://www.python.org/dev/peps/pep-0008/)
@@ -10,27 +10,22 @@
 **Author**: **Anuj Bajpayee** ([anujbajpayee14@gmail.com](mailto:anujbajpayee14@gmail.com))  
 **Institution**: **Indian Institute of Information Technology, Nagpur (IIITN)**
 
-> ### 🌐 Interactive Web Workstation: [`http://127.0.0.1:5000`](http://127.0.0.1:5000)
-> **Launch Command**: `python app.py`  
-> Features drag-and-drop image uploads, standard benchmarks (including the official **IIIT Nagpur Emblem**), side-by-side output visualization, and **real-time CPU Utilization (%), Execution Latency (ms), and RAM Footprint (MB)** across all 5 DIP tasks!
+> ### 🌐 Live Interactive Web App: [**https://anujbajpayee.github.io/dip_lab_tasks/**](https://anujbajpayee.github.io/dip_lab_tasks/)
+> Click the link above to directly access any DIP script in your browser and see real-time operations (Wavelet Transform, Histogram Equalization, Bit-Planes, Greyscale) executed on the official **IIIT Nagpur Logo** with live compute telemetry and zero installation required!
 
 ---
 
-## 🌐 Interactive Web Workstation & Telemetry Dashboard
+## ⚡ Direct Task Matrix & IIIT Nagpur Logo Operations
 
-An interactive browser dashboard that allows uploading any custom image or selecting standard benchmarks (such as the official **IIIT Nagpur Logo**) to execute and visualize all DIP tasks with real-time hardware telemetry:
-- ⚡ **Live CPU Utilization (%)**: Hardware-accurate processor load tracking.
-- ⏱️ **Execution Latency (ms)**: Real-time wall-clock compute timing.
-- 💾 **Process Memory (RAM)**: Resident Set Size (RSS) memory delta.
-- 🖼️ **Side-by-Side Canvas**: Instant comparison with high-res export.
+Directly explore any task script, documentation, and the corresponding processed output on the **IIIT Nagpur Logo**:
 
-```bash
-# 1. Start the Interactive Web Dashboard
-python app.py
-
-# 2. Open in your browser:
-http://127.0.0.1:5000
-```
+| Task Module | Core Script | Operation & Mathematical Model | Processed IIITN Logo Output | Documentation |
+| :--- | :--- | :--- | :--- | :--- |
+| **Task 5: Wavelet Transform** | [`wavelet.py`](task_5_wavelet_transform/wavelet.py) | **2D DWT**: $LL, LH, HL, HH$ Subband Decomposition & IDWT | [🖼️ Subband Grid](task_5_wavelet_transform/outputs/iiitn_logo_subband_grid.png) • [📉 Compression Grid](task_5_wavelet_transform/outputs/iiitn_logo_compression_grid.png) | [`task_5_wavelet_transform/README.md`](task_5_wavelet_transform/README.md) |
+| **Task 4: Histogram Equalization** | [`histogram.py`](task_4_histogram_equalization/histogram.py) | **Contrast Enhancement**: GHE, BBHE, CLAHE, Color HSV | [🖼️ Equalization Comparison Grid](task_4_histogram_equalization/outputs/iiitn_logo_comparison_grid.png) | [`task_4_histogram_equalization/README.md`](task_4_histogram_equalization/README.md) |
+| **Task 3: Bit-Plane Slicing** | [`bit_plane.py`](task_3_bit_plane_slicing/bit_plane.py) | **8-Bit Decomposition**: $b_k = (f \gg k)\ \&\ 1$ & LSB Steganography | [🖼️ 9-Panel Bit-Plane Grid](task_3_bit_plane_slicing/outputs/iiitn_logo_bit_planes_grid.png) • [🔒 Steganography](task_3_bit_plane_slicing/outputs/iiitn_logo_steganography_demo.png) | [`task_3_bit_plane_slicing/README.md`](task_3_bit_plane_slicing/README.md) |
+| **Task 2: RGB to Greyscale** | [`grayscale.py`](task_2_rgb_to_greyscale_conversion/grayscale.py) | **Luminosity**: ITU-R BT.601 ($0.299R+0.587G+0.114B$), BT.709, Gamma | [🖼️ 9-Panel Greyscale Grid](task_2_rgb_to_greyscale_conversion/outputs/iiitn_logo_comparison_grid.png) | [`task_2_rgb_to_greyscale_conversion/README.md`](task_2_rgb_to_greyscale_conversion/README.md) |
+| **Task 1: Tambola Ticket Generator** | [`generator.py`](task_1_tambola_ticket_generator/generator.py) | **CSP Engine**: $3 \times 9$ Ticket & 6-Ticket Strip (1-90) | [🎲 Generated Strip](task_1_tambola_ticket_generator/outputs/sample_strip_of_6.txt) • [📊 Benchmark](task_1_tambola_ticket_generator/outputs/algorithm_benchmark.txt) | [`task_1_tambola_ticket_generator/README.md`](task_1_tambola_ticket_generator/README.md) |
 
 ---
 
@@ -39,12 +34,19 @@ http://127.0.0.1:5000
 ```
 dip_lab_tasks/
 │
-├── app.py                             # Interactive Flask Web Dashboard with live CPU & RAM Telemetry
+├── docs/                              # Standalone GitHub Pages Live Web Workstation
+│   ├── index.html                     # Live in-browser interactive DIP Explorer
+│   ├── style.css                      # Design system & responsive layout styles
+│   ├── app.js                         # In-browser DWT, CLAHE, Bit-Plane & Greyscale engine
+│   └── assets/
+│       └── iiitn_logo.png             # Official IIIT Nagpur emblem benchmark asset
+│
+├── app.py                             # Local Flask Web Dashboard with live CPU & RAM Telemetry
 ├── templates/
 │   └── index.html                     # Modern dark-theme DIP Workstation UI
 ├── static/
-│   ├── style.css                      # Design system & responsive layout styles
-│   └── app.js                         # Drag-and-drop uploader, API client & telemetry rendering
+│   ├── style.css                      # Styling for local Flask web app
+│   └── app.js                         # Client logic for Flask backend
 ├── assets/
 │   └── iiitn_logo.png                 # Official IIIT Nagpur benchmark logo asset
 │
@@ -140,7 +142,7 @@ dip_lab_tasks/
 ### 1. Installation
 ```bash
 # Clone the repository
-git clone https://github.com/<YOUR_USERNAME>/dip_lab_tasks.git
+git clone https://github.com/AnujBajpayee/dip_lab_tasks.git
 cd dip_lab_tasks
 
 # Create virtual environment
@@ -151,38 +153,17 @@ source .venv/bin/activate    # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 2. Launch Interactive Web Dashboard
-```bash
-python app.py
-```
-Open your browser at `http://127.0.0.1:5000` to upload images, select presets, view subbands, and monitor real-time CPU telemetry!
-
-### 3. Run All 5 Tasks in One Command
+### 2. Run All 5 Tasks in One Command
 ```bash
 python run_all.py
 ```
 
-### 4. Run Individual CLI Tasks
+### 3. Run Local Web App (Flask Dashboard)
 ```bash
-# Task 1: Tambola Generator
-python task_1_tambola_ticket_generator/main.py --ticket
-python task_1_tambola_ticket_generator/main.py --strip
-python task_1_tambola_ticket_generator/main.py --benchmark
-
-# Task 2: RGB to Greyscale
-python task_2_rgb_to_greyscale_conversion/main.py --generate-test-patterns
-
-# Task 3: Bit Plane Slicing & Steganography
-python task_3_bit_plane_slicing/main.py --generate-test-patterns
-
-# Task 4: Histogram Equalization Suite
-python task_4_histogram_equalization/main.py --generate-test-patterns
-
-# Task 5: 2D Discrete Wavelet Transform
-python task_5_wavelet_transform/main.py --generate-test-patterns
+python app.py
 ```
 
-### 5. Run Automated Unit Tests
+### 4. Run Automated Unit Tests
 ```bash
 pytest task_1_tambola_ticket_generator/test_tambola.py -v
 pytest task_2_rgb_to_greyscale_conversion/test_grayscale.py -v

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIP Lab Workstation | Interactive Image Processing Explorer</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- HEADER -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-logo">🌊</div>
+        <div>
+          <h1>DIP LAB INTERACTIVE WORKSTATION</h1>
+          <p class="subtitle">Real-Time Digital Image Processing & Performance Telemetry</p>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="badge institute-badge">
+          <span class="dot"></span> Indian Institute of Information Technology, Nagpur (IIITN)
+        </div>
+        <div class="badge author-badge">
+          Author: <strong>Anuj Bajpayee</strong>
+        </div>
+      </div>
+    </header>
+
+    <!-- LIVE HARDWARE & PERFORMANCE HUD -->
+    <section class="telemetry-bar">
+      <div class="telemetry-card">
+        <div class="telemetry-header">
+          <span class="icon">⚡</span>
+          <span class="label">CLIENT CPU / COMPUTE LOAD</span>
+        </div>
+        <div class="telemetry-value-row">
+          <span class="telemetry-value" id="telemetry-cpu">100.0%</span>
+          <span class="telemetry-sub" id="telemetry-cores">Multi-Threaded</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="cpu-progress-fill" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <div class="telemetry-card">
+        <div class="telemetry-header">
+          <span class="icon">⏱️</span>
+          <span class="label">EXECUTION TIME</span>
+        </div>
+        <div class="telemetry-value-row">
+          <span class="telemetry-value" id="telemetry-time">0.0 ms</span>
+          <span class="telemetry-sub">Latency</span>
+        </div>
+        <div class="status-indicator">In-Browser Real-Time Compute</div>
+      </div>
+
+      <div class="telemetry-card">
+        <div class="telemetry-header">
+          <span class="icon">🎓</span>
+          <span class="label">ACTIVE BENCHMARK IMAGE</span>
+        </div>
+        <div class="telemetry-value-row">
+          <span class="telemetry-value">IIITN Logo</span>
+          <span class="telemetry-sub">640 × 640 RGB</span>
+        </div>
+        <div class="status-indicator">Official IIIT Nagpur Emblem</div>
+      </div>
+
+      <div class="telemetry-card">
+        <div class="telemetry-header">
+          <span class="icon">📐</span>
+          <span class="label">TRANSFORMATION STATE</span>
+        </div>
+        <div class="telemetry-value-row">
+          <span class="telemetry-value" id="telemetry-active-task">Task 5</span>
+          <span class="telemetry-sub" id="telemetry-algo-tag">2D DWT</span>
+        </div>
+        <div class="status-indicator" id="telemetry-status">Ready</div>
+      </div>
+    </section>
+
+    <!-- MAIN BODY GRID -->
+    <div class="main-layout">
+      <!-- SIDEBAR: SCRIPT & OPERATION SELECTOR -->
+      <aside class="sidebar">
+        <div class="section-box task-navigation">
+          <h3 class="section-title">⚙️ Select Task & Script</h3>
+          <nav class="task-tabs">
+            <button class="task-tab-btn active" data-task="task_5_wavelet">
+              <span class="tab-num">T5</span>
+              <div class="tab-info">
+                <span class="tab-label">2D Wavelet Transform</span>
+                <small class="tab-desc">DWT, Subbands LL/LH/HL/HH</small>
+              </div>
+            </button>
+            <button class="task-tab-btn" data-task="task_4_histogram">
+              <span class="tab-num">T4</span>
+              <div class="tab-info">
+                <span class="tab-label">Histogram Equalization</span>
+                <small class="tab-desc">GHE, BBHE, CLAHE, Color HSV</small>
+              </div>
+            </button>
+            <button class="task-tab-btn" data-task="task_3_bit_plane">
+              <span class="tab-num">T3</span>
+              <div class="tab-info">
+                <span class="tab-label">8-Bit Plane Slicing</span>
+                <small class="tab-desc">Planes 0-7, LSB Steganography</small>
+              </div>
+            </button>
+            <button class="task-tab-btn" data-task="task_2_grayscale">
+              <span class="tab-num">T2</span>
+              <div class="tab-info">
+                <span class="tab-label">RGB to Greyscale</span>
+                <small class="tab-desc">Rec.601, Rec.709, Gamma, Channels</small>
+              </div>
+            </button>
+            <button class="task-tab-btn" data-task="task_1_tambola">
+              <span class="tab-num">T1</span>
+              <div class="tab-info">
+                <span class="tab-label">Tambola Ticket Engine</span>
+                <small class="tab-desc">CSP Ticket & 6-Ticket Strip</small>
+              </div>
+            </button>
+          </nav>
+        </div>
+
+        <div class="section-box">
+          <h3 class="section-title">🔗 Quick GitHub Source Links</h3>
+          <ul class="github-links">
+            <li><a href="https://github.com/AnujBajpayee/dip_lab_tasks/tree/main/task_5_wavelet_transform" target="_blank">📂 Task 5 (Wavelet Transform)</a></li>
+            <li><a href="https://github.com/AnujBajpayee/dip_lab_tasks/tree/main/task_4_histogram_equalization" target="_blank">📂 Task 4 (Histogram Equalization)</a></li>
+            <li><a href="https://github.com/AnujBajpayee/dip_lab_tasks/tree/main/task_3_bit_plane_slicing" target="_blank">📂 Task 3 (Bit Plane Slicing)</a></li>
+            <li><a href="https://github.com/AnujBajpayee/dip_lab_tasks/tree/main/task_2_rgb_to_greyscale_conversion" target="_blank">📂 Task 2 (RGB to Greyscale)</a></li>
+            <li><a href="https://github.com/AnujBajpayee/dip_lab_tasks/tree/main/task_1_tambola_ticket_generator" target="_blank">📂 Task 1 (Tambola Generator)</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- WORKSPACE -->
+      <main class="workstation">
+        <!-- CONTROLS & ALGORITHM TOOLBAR -->
+        <div class="controls-card">
+          <div class="controls-header">
+            <div class="controls-title-group">
+              <h2 id="task-headline">Task 5: 2D Discrete Wavelet Transform (DWT)</h2>
+              <p id="task-subline" class="task-subline">Performing 2D multi-resolution frequency decomposition on the IIIT Nagpur Logo.</p>
+            </div>
+          </div>
+
+          <!-- Dynamic Operations Selector -->
+          <div class="dynamic-controls" id="dynamic-controls"></div>
+        </div>
+
+        <!-- FORMULA BANNER -->
+        <div class="formula-card">
+          <div class="formula-tag">MATHEMATICAL FORMULATION</div>
+          <div class="formula-text" id="formula-display">
+            LL = (f * h0 · h0^T) ↓2 • LH = (f * h0 · h1^T) ↓2 • HL = (f * h1 · h0^T) ↓2 • HH = (f * h1 · h1^T) ↓2
+          </div>
+        </div>
+
+        <!-- SIDE-BY-SIDE VISUAL CANVAS -->
+        <div class="canvas-container">
+          <!-- Input Card -->
+          <div class="image-panel">
+            <div class="panel-header">
+              <span class="panel-title">Original IIIT Nagpur Logo (Input)</span>
+              <span class="panel-tag">640 × 640 RGB</span>
+            </div>
+            <div class="image-wrapper">
+              <img id="input-preview" src="assets/iiitn_logo.png" alt="IIIT Nagpur Logo">
+            </div>
+          </div>
+
+          <!-- Output Card -->
+          <div class="image-panel">
+            <div class="panel-header">
+              <span class="panel-title" id="output-title">Processed Output (Live)</span>
+              <span class="panel-tag" id="output-tag">Resolution: 640 × 640</span>
+            </div>
+            <div class="image-wrapper" id="output-wrapper">
+              <canvas id="output-canvas" width="640" height="640"></canvas>
+              <div id="tambola-output-container" class="tambola-output-hidden"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- METRICS TABLE -->
+        <div class="metrics-card">
+          <h3 class="metrics-title">📊 Mathematical Analysis & Diagnostics (Computed on IIITN Logo)</h3>
+          <div class="metrics-table-container" id="metrics-table-container"></div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
