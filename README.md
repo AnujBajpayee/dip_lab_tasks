@@ -6,9 +6,26 @@
 [![Code Style: PEP 8](https://img.shields.io/badge/code%20style-PEP%208-green.svg)](https://www.python.org/dev/peps/pep-0008/)
 [![Author](https://img.shields.io/badge/author-Anuj%20Bajpayee-orange.svg)](mailto:anujbajpayee14@gmail.com)
 
-**Author**: **Anuj Bajpayee** ([anujbajpayee14@gmail.com](mailto:anujbajpayee14@gmail.com))
+**Author**: **Anuj Bajpayee** ([anujbajpayee14@gmail.com](mailto:anujbajpayee14@gmail.com))  
+**Institution**: **Indian Institute of Information Technology, Nagpur (IIITN)**
 
-This repository contains the laboratory assignments and algorithmic implementations for Digital Image Processing (DIP) and Computational Algorithms. Each task is segregated into its own self-contained directory with dedicated code, documentation, unit tests, and generated visual outputs.
+This repository contains the laboratory assignments, algorithmic implementations, and an interactive **Flask Web Workstation** with real-time **CPU utilization & hardware telemetry** for Digital Image Processing (DIP) and Computational Algorithms.
+
+---
+
+## 🌐 Interactive Web Workstation & Telemetry Dashboard
+
+An interactive dashboard that allows uploading any custom image or selecting standard benchmarks (such as the official **IIIT Nagpur Logo**) to execute and visualize all DIP tasks with real-time hardware telemetry:
+- ⚡ **Live CPU Utilization (%)**: Hardware-accurate processor load tracking.
+- ⏱️ **Execution Latency (ms)**: Real-time wall-clock compute timing.
+- 💾 **Process Memory (RAM)**: Resident Set Size (RSS) memory delta.
+- 🖼️ **Side-by-Side Canvas**: Instant comparison with high-res export.
+
+```bash
+# Start the Interactive Web Dashboard
+python app.py
+# Open in browser: http://127.0.0.1:5000
+```
 
 ---
 
@@ -16,6 +33,15 @@ This repository contains the laboratory assignments and algorithmic implementati
 
 ```
 dip_lab_tasks/
+│
+├── app.py                             # Interactive Flask Web Dashboard with live CPU & RAM Telemetry
+├── templates/
+│   └── index.html                     # Modern dark-theme DIP Workstation UI
+├── static/
+│   ├── style.css                      # Design system & responsive layout styles
+│   └── app.js                         # Drag-and-drop uploader, API client & telemetry rendering
+├── assets/
+│   └── iiitn_logo.png                 # Official IIIT Nagpur benchmark logo asset
 │
 ├── task_1_tambola_ticket_generator/
 │   ├── README.md                      # Complete description of rules, naive 0/1 array analysis & CSP
@@ -50,6 +76,14 @@ dip_lab_tasks/
 │   ├── test_histogram.py              # Pytest unit tests for Task 4
 │   └── outputs/                       # Low-contrast before/after grids and histogram distribution graphs
 │
+├── task_5_wavelet_transform/
+│   ├── README.md                      # 2D DWT subband theory (LL, LH, HL, HH), Mallat algorithm, energy analysis
+│   ├── wavelet.py                     # Self-contained 2D DWT, 2D IDWT, multi-level quadtree & thresholding
+│   ├── visualizer.py                  # 4-subband composite grids, quadtree mosaics, and compression benchmarks
+│   ├── main.py                        # Standalone CLI runner for Task 5
+│   ├── test_wavelet.py                # Pytest unit tests for Task 5
+│   └── outputs/                       # Subband decompositions, multi-level mosaics, and compression grids
+│
 ├── .github/
 │   ├── workflows/
 │   │   └── ci.yml                     # Multi-OS & Multi-Python CI workflow
@@ -63,7 +97,7 @@ dip_lab_tasks/
 ├── SECURITY.md
 ├── pyproject.toml
 ├── requirements.txt
-└── run_all.py                         # Single runner to execute all 4 tasks & update all outputs
+└── run_all.py                         # Single runner to execute all 5 tasks & update all outputs
 ```
 
 ---
@@ -71,26 +105,28 @@ dip_lab_tasks/
 ## 🎯 Task Summaries
 
 ### [Task 1: Tambola (Housie) Ticket Generator](task_1_tambola_ticket_generator/)
-- **Description**: Detailed analysis of how a standard $3 \times 9$ Tambola ticket is constructed with 15 numbers, 5 numbers per row, column range constraints (Col 0: $[1, 9]$, ..., Col 8: $[80, 90]$), and vertical ascending sorting.
-- **The 0/1 Random Array Journey**: Documents how initial naive random binary arrays suffer $\approx 28.5\% - 62.4\%$ rejection rates due to column starvation, and how we evolved to a deterministic **Constraint-Satisfaction bipartite matching engine** capable of generating full 6-ticket strips using numbers $1 \dots 90$ with zero collisions or omissions.
+- **Description**: $3 \times 9$ Tambola ticket construction with 15 numbers, 5 per row, ascending column ranges (Col 0: $[1, 9]$, ..., Col 8: $[80, 90]$).
+- **The 0/1 Random Array Journey**: Documents why naive random binary arrays fail ($\approx 28.5\% - 62.4\%$ rejection rate), and solves it via a deterministic **Constraint-Satisfaction bipartite matching engine** generating full 6-ticket strips (numbers $1 \dots 90$) with zero collisions or omissions.
 - **Detailed Documentation**: See [`task_1_tambola_ticket_generator/README.md`](task_1_tambola_ticket_generator/README.md).
 
 ### [Task 2: Standard RGB to Greyscale Image Conversion](task_2_rgb_to_greyscale_conversion/)
-- **Description**: Rigorous implementation of standard digital image processing algorithms for converting trichromatic RGB images to greyscale based on human retinal physiology (L, M, S cone sensitivities with peak photopic luminous efficiency $V(\lambda)$ at $555\text{ nm}$ green).
-- **Algorithms**: ITU-R BT.601, ITU-R BT.709 / sRGB, Simple Average, HSL Lightness / Desaturation, Linearized Gamma-Corrected Luma, and Single-Channel decompositions.
-- **Outputs**: Calibrated test target conversions and 9-panel side-by-side composite comparison grids with explicit mathematical formulas.
+- **Description**: Standard DIP algorithms for trichromatic RGB to greyscale conversion based on human retinal physiology (L, M, S cone sensitivities with peak photopic luminous efficiency $V(\lambda)$ at $555\text{ nm}$ green).
+- **Algorithms**: ITU-R BT.601, ITU-R BT.709 / sRGB, Simple Average, HSL Lightness, Gamma-Corrected Luma, and Single-Channel extraction.
 - **Detailed Documentation**: See [`task_2_rgb_to_greyscale_conversion/README.md`](task_2_rgb_to_greyscale_conversion/README.md).
 
 ### [Task 3: 8-Bit Plane Slicing & Digital Steganography](task_3_bit_plane_slicing/)
-- **Description**: Mathematical decomposition of 8-bit monochromatic images into 8 binary matrices (1-bit planes), isolating geometric structure in high-order bits (MSB) and fine texture/noise in low-order bits (LSB).
-- **Applications**: Selective multi-plane reconstruction, lossy image compression (50% bit reduction with $>94\%$ energy conservation), and imperceptible Least Significant Bit (LSB) digital watermarking/steganography ($\text{PSNR} > 50\text{ dB}$).
-- **Outputs**: Embedded input patterns, 9-panel bit-plane grids, cumulative progressive decoding grids, and steganography pipelines.
+- **Description**: Mathematical decomposition of 8-bit images into 8 binary matrices ($b_k = (f \gg k)\ \&\ 1$), isolating structural geometry in MSB and noise in LSB.
+- **Applications**: Selective multi-plane reconstruction, lossy compression ($>94\%$ energy in top 4 bits), and imperceptible Least Significant Bit (LSB) digital watermarking ($\text{PSNR} > 50\text{ dB}$).
 - **Detailed Documentation**: See [`task_3_bit_plane_slicing/README.md`](task_3_bit_plane_slicing/README.md).
 
 ### [Task 4: Histogram Equalization Types & Execution](task_4_histogram_equalization/)
-- **Description**: Comprehensive practical suite of spatial contrast enhancement algorithms: Global Histogram Equalization (GHE), Brightness Preserving Bi-Histogram Equalization (BBHE), Contrast Limited Adaptive Histogram Equalization (CLAHE), Histogram Matching (Specification), and Color-Preserving HSV Equalization.
-- **Outputs**: Low-contrast before/after comparison grids with embedded 256-bin histogram and CDF distribution graphs.
+- **Description**: Practical contrast enhancement algorithms: Global Histogram Equalization (GHE), Brightness Preserving Bi-Histogram Equalization (BBHE), Contrast Limited Adaptive Histogram Equalization (CLAHE), Histogram Matching (Specification), and Color-Preserving HSV Equalization.
 - **Detailed Documentation**: See [`task_4_histogram_equalization/README.md`](task_4_histogram_equalization/README.md).
+
+### [Task 5: 2D Discrete Wavelet Transform (DWT & IDWT)](task_5_wavelet_transform/)
+- **Description**: Space-frequency localization decomposing images into approximation ($LL$) and directional edge subbands ($LH$: Horizontal, $HL$: Vertical, $HH$: Diagonal).
+- **Applications**: Multi-level dyadic quad-tree decomposition, lossless mathematical reconstruction ($f = \text{IDWT}(\text{DWT}(f))$), subband energy distribution analysis ($E(LL) > 96\%$), and wavelet coefficient thresholding / compression.
+- **Detailed Documentation**: See [`task_5_wavelet_transform/README.md`](task_5_wavelet_transform/README.md).
 
 ---
 
@@ -110,12 +146,18 @@ source .venv/bin/activate    # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 2. Run All 4 Tasks in One Command
+### 2. Launch Interactive Web Dashboard
+```bash
+python app.py
+```
+Open your browser at `http://127.0.0.1:5000` to upload images, select presets, view subbands, and monitor real-time CPU telemetry!
+
+### 3. Run All 5 Tasks in One Command
 ```bash
 python run_all.py
 ```
 
-### 3. Run Individual Tasks
+### 4. Run Individual CLI Tasks
 ```bash
 # Task 1: Tambola Generator
 python task_1_tambola_ticket_generator/main.py --ticket
@@ -130,14 +172,18 @@ python task_3_bit_plane_slicing/main.py --generate-test-patterns
 
 # Task 4: Histogram Equalization Suite
 python task_4_histogram_equalization/main.py --generate-test-patterns
+
+# Task 5: 2D Discrete Wavelet Transform
+python task_5_wavelet_transform/main.py --generate-test-patterns
 ```
 
-### 4. Run Automated Unit Tests
+### 5. Run Automated Unit Tests
 ```bash
 pytest task_1_tambola_ticket_generator/test_tambola.py -v
 pytest task_2_rgb_to_greyscale_conversion/test_grayscale.py -v
 pytest task_3_bit_plane_slicing/test_bit_plane.py -v
 pytest task_4_histogram_equalization/test_histogram.py -v
+pytest task_5_wavelet_transform/test_wavelet.py -v
 ```
 
 ---

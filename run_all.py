@@ -2,8 +2,9 @@
 DIP Lab Tasks: Master Runner
 ============================
 Executes Task 1 (Tambola Ticket Generator), Task 2 (RGB-to-Greyscale Converter),
-Task 3 (Bit Plane Slicing & Digital Steganography), and Task 4 (Histogram Equalization),
-populating all outputs and benchmarks in their respective dedicated folders.
+Task 3 (Bit Plane Slicing & Digital Steganography), Task 4 (Histogram Equalization),
+and Task 5 (2D Discrete Wavelet Transform), processing both calibrated synthetic
+targets and the official IIIT Nagpur Logo across all visual pipelines.
 """
 
 from __future__ import annotations
@@ -77,8 +78,31 @@ from task_4_histogram_equalization.visualizer import (
     create_histogram_comparison_grid,
 )
 
+# Task 5 Imports
+from task_5_wavelet_transform.wavelet import (
+    dwt2,
+    idwt2,
+    wavedec2,
+    compute_wavelet_energy,
+    threshold_wavelet_coefficients,
+)
+from task_5_wavelet_transform.visualizer import (
+    create_subband_decomposition_grid,
+    create_multilevel_quadtree_image,
+    create_wavelet_compression_grid,
+    normalize_subband_for_display,
+)
+
 import numpy as np
 from PIL import Image
+
+
+def get_iiitn_logo() -> Image.Image:
+    """Loads the IIIT Nagpur logo asset."""
+    logo_path = os.path.join(base_dir, "assets", "iiitn_logo.png")
+    if os.path.exists(logo_path):
+        return Image.open(logo_path)
+    return create_color_palette_test_image(640, 640)
 
 
 def run_task_1(output_dir: str = "task_1_tambola_ticket_generator/outputs") -> None:
@@ -136,13 +160,14 @@ def run_task_2(output_dir: str = "task_2_rgb_to_greyscale_conversion/outputs") -
     os.makedirs(output_dir, exist_ok=True)
 
     targets = [
+        ("iiitn_logo", get_iiitn_logo(), "IIIT Nagpur Official Logo"),
         ("color_chart", create_color_palette_test_image(640, 480), "Calibrated Color Test Chart"),
         ("scenery", create_scenery_test_image(640, 480), "Dynamic Scenery Scene"),
     ]
 
     for prefix, img_pil, desc in targets:
         print(f"\n• Processing: {desc}")
-        np_rgb = np.array(img_pil)
+        np_rgb = np.array(img_pil.convert("RGB"))
 
         orig_file = f"{prefix}_original_rgb.png"
         img_pil.save(os.path.join(output_dir, orig_file))
@@ -176,6 +201,7 @@ def run_task_3(output_dir: str = "task_3_bit_plane_slicing/outputs") -> None:
     os.makedirs(output_dir, exist_ok=True)
 
     targets = [
+        ("iiitn_logo", get_iiitn_logo().convert("L"), "IIIT Nagpur Official Logo"),
         ("test_pattern", create_rich_test_pattern(640, 480), "Calibrated Bit-Plane Decomposition Target"),
         ("scenery", create_scenery_test_image(640, 480).convert("L"), "Photographic Scenery Target"),
     ]
@@ -204,7 +230,7 @@ def run_task_3(output_dir: str = "task_3_bit_plane_slicing/outputs") -> None:
         create_cumulative_reconstruction_grid(img_pil, cumul_results, output_path=os.path.join(output_dir, recon_grid_file))
 
         # Steganography Demo
-        wm_pil = create_watermark_pattern(width, height, label="DIP LAB 2026")
+        wm_pil = create_watermark_pattern(width, height, label="IIIT NAGPUR 2026")
         wm_np = np.array(wm_pil)
         wm_pil.save(os.path.join(output_dir, f"{prefix}_watermark_original.png"))
 
@@ -225,11 +251,22 @@ def run_task_4(output_dir: str = "task_4_histogram_equalization/outputs") -> Non
     print("=" * 70)
     os.makedirs(output_dir, exist_ok=True)
 
-    # 1. Low Contrast Scene
+    # 1. IIIT Nagpur Logo
+    iiitn_img = get_iiitn_logo()
+    np_iiitn_gray = np.array(iiitn_img.convert("L"))
+    iiitn_img.save(os.path.join(output_dir, "iiitn_logo_original.png"))
+    iiitn_eqs = {
+        "Global HE (GHE)": global_histogram_equalization(np_iiitn_gray),
+        "Bi-Histogram Equalization (BBHE)": bi_histogram_equalization(np_iiitn_gray),
+        "CLAHE (Adaptive Local)": clahe(np_iiitn_gray, clip_limit=2.5, tile_grid_size=(8, 8)),
+        "Histogram Matching": histogram_matching(np_iiitn_gray, np.linspace(0, 255, 256, dtype=np.uint8)),
+    }
+    create_histogram_comparison_grid(iiitn_img, iiitn_eqs, output_path=os.path.join(output_dir, "iiitn_logo_comparison_grid.png"))
+
+    # 2. Low Contrast Scene
     low_scene = create_low_contrast_scene(640, 480)
     np_low = np.array(low_scene)
     low_scene.save(os.path.join(output_dir, "low_contrast_original.png"))
-
     low_eqs = {
         "Global HE (GHE)": global_histogram_equalization(np_low),
         "Bi-Histogram Equalization (BBHE)": bi_histogram_equalization(np_low),
@@ -238,11 +275,10 @@ def run_task_4(output_dir: str = "task_4_histogram_equalization/outputs") -> Non
     }
     create_histogram_comparison_grid(low_scene, low_eqs, output_path=os.path.join(output_dir, "low_contrast_comparison_grid.png"))
 
-    # 2. Uneven Illumination Scene
+    # 3. Uneven Illumination Scene
     uneven_scene = create_uneven_illumination_scene(640, 480)
     np_uneven = np.array(uneven_scene)
     uneven_scene.save(os.path.join(output_dir, "uneven_illumination_original.png"))
-
     uneven_eqs = {
         "Global HE (GHE)": global_histogram_equalization(np_uneven),
         "Bi-Histogram Equalization (BBHE)": bi_histogram_equalization(np_uneven),
@@ -251,19 +287,61 @@ def run_task_4(output_dir: str = "task_4_histogram_equalization/outputs") -> Non
     }
     create_histogram_comparison_grid(uneven_scene, uneven_eqs, output_path=os.path.join(output_dir, "uneven_illumination_comparison_grid.png"))
 
-    # 3. Color Haze Landscape
+    # 4. Color Haze Landscape
     color_scene = create_scenery_test_image(640, 480)
     np_scenery = np.clip(np.array(color_scene).astype(np.float64) * 0.4 + 50, 0, 255).astype(np.uint8)
     color_hazy = Image.fromarray(np_scenery)
     color_hazy.save(os.path.join(output_dir, "color_haze_original_rgb.png"))
-
     color_eqs = {
         "Global HE (GHE)": color_histogram_equalization(np_scenery, method="ghe"),
         "Bi-Histogram Equalization (BBHE)": color_histogram_equalization(np_scenery, method="bbhe"),
         "Color HSV Equalization": color_histogram_equalization(np_scenery, method="clahe", clip_limit=2.5, tile_grid_size=(8, 8)),
     }
     create_histogram_comparison_grid(color_hazy, color_eqs, output_path=os.path.join(output_dir, "color_haze_comparison_grid.png"))
-    print("  -> Saved Low-Contrast, Uneven Illumination, and Color Haze Equalization grids in task 4 outputs.")
+    print("  -> Saved IIITN Logo, Low-Contrast, Uneven Illumination, and Color Haze Equalization grids in task 4 outputs.")
+
+
+def run_task_5(output_dir: str = "task_5_wavelet_transform/outputs") -> None:
+    print("\n" + "=" * 70)
+    print("🌊 RUNNING TASK 5: 2D DISCRETE WAVELET TRANSFORM (DWT & IDWT)")
+    print("=" * 70)
+    os.makedirs(output_dir, exist_ok=True)
+
+    targets = [
+        ("iiitn_logo", get_iiitn_logo().convert("L"), "IIIT Nagpur Official Logo"),
+        ("test_pattern", create_rich_test_pattern(640, 480), "Calibrated Multi-Frequency Target"),
+        ("scenery", create_scenery_test_image(640, 480).convert("L"), "Photographic Scenery Target"),
+    ]
+
+    for prefix, img_pil, desc in targets:
+        print(f"\n• Processing: {desc}")
+        np_gray = np.array(img_pil)
+
+        orig_file = f"{prefix}_original.png"
+        img_pil.save(os.path.join(output_dir, orig_file))
+
+        coeffs = dwt2(np_gray, wavelet="haar")
+        ll, (lh, hl, hh) = coeffs
+
+        # Save individual subbands
+        Image.fromarray(normalize_subband_for_display(ll, is_ll=True)).save(os.path.join(output_dir, f"{prefix}_subband_ll.png"))
+        Image.fromarray(normalize_subband_for_display(lh, is_ll=False)).save(os.path.join(output_dir, f"{prefix}_subband_lh.png"))
+        Image.fromarray(normalize_subband_for_display(hl, is_ll=False)).save(os.path.join(output_dir, f"{prefix}_subband_hl.png"))
+        Image.fromarray(normalize_subband_for_display(hh, is_ll=False)).save(os.path.join(output_dir, f"{prefix}_subband_hh.png"))
+
+        # 4-Subband Decomposition Grid
+        grid_file = f"{prefix}_subband_grid.png"
+        create_subband_decomposition_grid(img_pil, coeffs, wavelet="haar", output_path=os.path.join(output_dir, grid_file))
+
+        # Multi-Level Quadtree Mosaic
+        m_coeffs = wavedec2(np_gray, wavelet="haar", level=2)
+        mosaic_file = f"{prefix}_multilevel_quadtree_level2.png"
+        create_multilevel_quadtree_image(m_coeffs, output_path=os.path.join(output_dir, mosaic_file))
+
+        # Wavelet Compression Benchmark Grid
+        comp_file = f"{prefix}_compression_grid.png"
+        create_wavelet_compression_grid(img_pil, wavelet="haar", output_path=os.path.join(output_dir, comp_file))
+        print(f"  -> Saved Subband Grid, Quadtree Mosaic, and Compression Grids: {prefix}")
 
 
 def main():
@@ -275,7 +353,8 @@ def main():
     run_task_2()
     run_task_3()
     run_task_4()
-    print(f"\n✨ All tasks executed successfully in {time.perf_counter() - start:.2f}s!\n")
+    run_task_5()
+    print(f"\n✨ All 5 tasks executed successfully in {time.perf_counter() - start:.2f}s!\n")
 
 
 if __name__ == "__main__":

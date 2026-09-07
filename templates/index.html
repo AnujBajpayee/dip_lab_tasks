@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIP Lab Workstation | Digital Image Processing & Algorithmic Suite</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- TOP NAVIGATION & HEADER -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-logo">🌊</div>
+        <div>
+          <h1>DIP LAB WORKSTATION</h1>
+          <p class="subtitle">Digital Image Processing & Performance Telemetry Profiler</p>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="badge institute-badge">
+          <span class="dot"></span> Indian Institute of Information Technology, Nagpur (IIITN)
+        </div>
+        <div class="badge author-badge">
+          Author: <strong>Anuj Bajpayee</strong>
+        </div>
+      </div>
+    </header>
+
+    <!-- LIVE HARDWARE & PERFORMANCE HUD -->
+    <section class="telemetry-bar">
+      <div class="telemetry-card" id="cpu-card">
+        <div class="telemetry-header">
+          <span class="icon">⚡</span>
+          <span class="label">CPU UTILIZATION</span>
+        </div>
+        <div class="telemetry-value-row">
+          <span class="telemetry-value" id="telemetry-cpu">0.0%</span>
+          <span class="telemetry-sub" id="telemetry-cores">-- Cores</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="cpu-progress-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div class="telemetry-card">
+        <div class="telemetry-header">
+          <span class="icon">⏱️</span>
+          <span class="label">EXECUTION TIME</span>
+        </div>
+        <div class="telemetry-value-row">
+          <span class="telemetry-value" id="telemetry-time">0.0 ms</span>
+          <span class="telemetry-sub">Wall Latency</span>
+        </div>
+        <div class="status-indicator">Real-Time Profiler Active</div>
+      </div>
+
+      <div class="telemetry-card">
+        <div class="telemetry-header">
+          <span class="icon">💾</span>
+          <span class="label">PROCESS MEMORY (RAM)</span>
+        </div>
+        <div class="telemetry-value-row">
+          <span class="telemetry-value" id="telemetry-ram">0.0 MB</span>
+          <span class="telemetry-sub" id="telemetry-ram-delta">Δ +0.0 MB</span>
+        </div>
+        <div class="status-indicator">Resident Set Size (RSS)</div>
+      </div>
+
+      <div class="telemetry-card">
+        <div class="telemetry-header">
+          <span class="icon">📐</span>
+          <span class="label">IMAGE SPECIFICATIONS</span>
+        </div>
+        <div class="telemetry-value-row">
+          <span class="telemetry-value" id="telemetry-res">640 × 640</span>
+          <span class="telemetry-sub" id="telemetry-mode">RGB (8-bit)</span>
+        </div>
+        <div class="status-indicator" id="telemetry-active-task">Task 5: Wavelet</div>
+      </div>
+    </section>
+
+    <!-- MAIN BODY GRID: SIDEBAR + WORKSTATION -->
+    <div class="main-layout">
+      <!-- LEFT SIDEBAR: IMAGE INPUT & PRESETS -->
+      <aside class="sidebar">
+        <div class="section-box">
+          <h3 class="section-title">📁 Input Image Source</h3>
+          
+          <!-- Drag and Drop Upload -->
+          <div class="drop-zone" id="drop-zone">
+            <input type="file" id="file-input" accept="image/*" class="file-input-hidden">
+            <div class="drop-zone-content">
+              <span class="upload-icon">📤</span>
+              <p class="upload-text"><strong>Click to Upload</strong> or drag & drop</p>
+              <span class="upload-hint">PNG, JPG, BMP, TIFF (Max 16MB)</span>
+            </div>
+          </div>
+
+          <!-- Quick Presets -->
+          <h4 class="preset-title">Standard Benchmark Presets</h4>
+          <div class="preset-grid">
+            <button class="preset-btn active" data-sample="iiitn_logo">
+              <span class="preset-icon">🎓</span>
+              <div class="preset-text">
+                <strong>IIITN Logo</strong>
+                <small>Official Emblem</small>
+              </div>
+            </button>
+            <button class="preset-btn" data-sample="test_pattern">
+              <span class="preset-icon">🔬</span>
+              <div class="preset-text">
+                <strong>Test Target</strong>
+                <small>Multi-Frequency</small>
+              </div>
+            </button>
+            <button class="preset-btn" data-sample="low_contrast">
+              <span class="preset-icon">🌙</span>
+              <div class="preset-text">
+                <strong>Night Scene</strong>
+                <small>Low Contrast</small>
+              </div>
+            </button>
+            <button class="preset-btn" data-sample="color_chart">
+              <span class="preset-icon">🎨</span>
+              <div class="preset-text">
+                <strong>Color Chart</strong>
+                <small>Palette Wedge</small>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <div class="section-box task-navigation">
+          <h3 class="section-title">⚙️ Select DIP Module</h3>
+          <nav class="task-tabs">
+            <button class="task-tab-btn active" data-task="task_5_wavelet">
+              <span class="tab-num">T5</span>
+              <span class="tab-label">2D Wavelet Transform</span>
+            </button>
+            <button class="task-tab-btn" data-task="task_4_histogram">
+              <span class="tab-num">T4</span>
+              <span class="tab-label">Histogram Equalization</span>
+            </button>
+            <button class="task-tab-btn" data-task="task_3_bit_plane">
+              <span class="tab-num">T3</span>
+              <span class="tab-label">8-Bit Plane Slicing</span>
+            </button>
+            <button class="task-tab-btn" data-task="task_2_grayscale">
+              <span class="tab-num">T2</span>
+              <span class="tab-label">RGB to Greyscale</span>
+            </button>
+            <button class="task-tab-btn" data-task="task_1_tambola">
+              <span class="tab-num">T1</span>
+              <span class="tab-label">Tambola Ticket Engine</span>
+            </button>
+          </nav>
+        </div>
+      </aside>
+
+      <!-- RIGHT MAIN WORKSPACE -->
+      <main class="workstation">
+        <!-- CONTROLS & ALGORITHM TOOLBAR -->
+        <div class="controls-card">
+          <div class="controls-header">
+            <div class="controls-title-group">
+              <h2 id="task-headline">Task 5: 2D Discrete Wavelet Transform (DWT)</h2>
+              <p id="task-subline" class="task-subline">Multi-resolution frequency decomposition and subband analysis.</p>
+            </div>
+            <button id="run-btn" class="run-btn">
+              <span class="btn-icon">⚡</span> Execute Algorithm
+            </button>
+          </div>
+
+          <!-- Dynamic Controls per Task -->
+          <div class="dynamic-controls" id="dynamic-controls">
+            <!-- Injected by JavaScript based on active task -->
+          </div>
+        </div>
+
+        <!-- FORMULA & OPERATION BANNER -->
+        <div class="formula-card">
+          <div class="formula-tag">MATHEMATICAL FORMULATION</div>
+          <div class="formula-text" id="formula-display">
+            LL = (f * h0 · h0^T) ↓2 • LH = (f * h0 · h1^T) ↓2 • HL = (f * h1 · h0^T) ↓2 • HH = (f * h1 · h1^T) ↓2
+          </div>
+        </div>
+
+        <!-- SIDE-BY-SIDE VISUAL COMPARISON CANVAS -->
+        <div class="canvas-container">
+          <!-- Input Card -->
+          <div class="image-panel">
+            <div class="panel-header">
+              <span class="panel-title">Original Input Image</span>
+              <span class="panel-tag" id="input-tag">Resolution: 640 × 640</span>
+            </div>
+            <div class="image-wrapper">
+              <img id="input-preview" src="/assets/iiitn_logo.png" alt="Input Preview">
+            </div>
+          </div>
+
+          <!-- Output Card -->
+          <div class="image-panel">
+            <div class="panel-header">
+              <span class="panel-title" id="output-title">Processed Output</span>
+              <div class="panel-actions">
+                <a id="download-btn" class="download-btn" href="#" download="processed_output.png">
+                  💾 Download Output
+                </a>
+              </div>
+            </div>
+            <div class="image-wrapper" id="output-wrapper">
+              <div class="loading-overlay" id="loading-overlay">
+                <div class="spinner"></div>
+                <p>Executing Image Processing & Profiling...</p>
+              </div>
+              <img id="output-preview" src="/assets/iiitn_logo.png" alt="Processed Output">
+              <div id="tambola-output-container" class="tambola-output-hidden"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- METRICS & STATISTICS TABLE -->
+        <div class="metrics-card" id="metrics-card">
+          <h3 class="metrics-title">📊 Image Metrics & Mathematical Diagnostics</h3>
+          <div class="metrics-table-container" id="metrics-table-container">
+            <!-- Dynamic table injected by JavaScript -->
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
