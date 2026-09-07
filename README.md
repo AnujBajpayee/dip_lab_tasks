@@ -1,6 +1,7 @@
 # Digital Image Processing & Algorithmic Lab Tasks (`dip_lab_tasks`) 🚀
 
 [![CI Pipeline](https://github.com/anujbajpayee14/dip_lab_tasks/actions/workflows/ci.yml/badge.svg)](https://github.com/anujbajpayee14/dip_lab_tasks/actions)
+[![Web Workstation](https://img.shields.io/badge/Web%20App-Interactive%20Workstation-6366f1.svg?logo=flask&logoColor=white)](http://127.0.0.1:5000)
 [![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code Style: PEP 8](https://img.shields.io/badge/code%20style-PEP%208-green.svg)](https://www.python.org/dev/peps/pep-0008/)
@@ -9,22 +10,26 @@
 **Author**: **Anuj Bajpayee** ([anujbajpayee14@gmail.com](mailto:anujbajpayee14@gmail.com))  
 **Institution**: **Indian Institute of Information Technology, Nagpur (IIITN)**
 
-This repository contains the laboratory assignments, algorithmic implementations, and an interactive **Flask Web Workstation** with real-time **CPU utilization & hardware telemetry** for Digital Image Processing (DIP) and Computational Algorithms.
+> ### 🌐 Interactive Web Workstation: [`http://127.0.0.1:5000`](http://127.0.0.1:5000)
+> **Launch Command**: `python app.py`  
+> Features drag-and-drop image uploads, standard benchmarks (including the official **IIIT Nagpur Emblem**), side-by-side output visualization, and **real-time CPU Utilization (%), Execution Latency (ms), and RAM Footprint (MB)** across all 5 DIP tasks!
 
 ---
 
 ## 🌐 Interactive Web Workstation & Telemetry Dashboard
 
-An interactive dashboard that allows uploading any custom image or selecting standard benchmarks (such as the official **IIIT Nagpur Logo**) to execute and visualize all DIP tasks with real-time hardware telemetry:
+An interactive browser dashboard that allows uploading any custom image or selecting standard benchmarks (such as the official **IIIT Nagpur Logo**) to execute and visualize all DIP tasks with real-time hardware telemetry:
 - ⚡ **Live CPU Utilization (%)**: Hardware-accurate processor load tracking.
 - ⏱️ **Execution Latency (ms)**: Real-time wall-clock compute timing.
 - 💾 **Process Memory (RAM)**: Resident Set Size (RSS) memory delta.
 - 🖼️ **Side-by-Side Canvas**: Instant comparison with high-res export.
 
 ```bash
-# Start the Interactive Web Dashboard
+# 1. Start the Interactive Web Dashboard
 python app.py
-# Open in browser: http://127.0.0.1:5000
+
+# 2. Open in your browser:
+http://127.0.0.1:5000
 ```
 
 ---
