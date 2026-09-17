@@ -2,97 +2,31 @@
 **Author**: Anuj Bajpayee ([anujbajpayee14@gmail.com](mailto:anujbajpayee14@gmail.com))
 
 ## 📖 Overview
-
-Transforming a three-channel trichromatic ($RGB$) digital image into a single-channel monochromatic (greyscale) representation is one of the cornerstone techniques in digital image processing, computer vision, and visual neuroscience.
-
-This module provides a scientific and engineering implementation of all standard greyscale conversion algorithms, including:
-1. **ITU-R Recommendation BT.601** (Standard Definition Video / PAL / NTSC)
-2. **ITU-R Recommendation BT.709** (High Definition & sRGB Display Standard)
-3. **Simple Arithmetic Average**
-4. **HSL Lightness / Desaturation Model**
-5. **Linearized Gamma-Corrected Perceptual Luminance**
-6. **Single Channel Extractions (Red, Green, Blue)**
+Implements standard algorithms for converting trichromatic RGB images into monochromatic greyscale representations based on perceptual luminance weighting and color models.
 
 ---
 
-## 🖼️ Visual Demonstrations & Algorithmic Comparison
+## 🖼️ Visual Benchmark on IIIT Nagpur Logo
 
-### 1. Calibrated Color Test Target Benchmark
+Comparison grid displaying original input, single channel extractions (R, G, B), and weighted conversions:
 
-Below is the side-by-side 9-panel benchmark grid on a calibrated color palette, showing exact transformation formulas and visual responses across primary, secondary, and skin tones:
-
-![Calibrated Color Target Comparison Grid](outputs/color_chart_comparison_grid.png)
+![IIIT Nagpur Logo Greyscale Comparison Grid](outputs/iiitn_logo_comparison_grid.png)
 
 ---
 
-### 2. Natural Photographic Scenery Benchmark
+## 📐 1. Mathematical Formulations
 
-Applied to continuous landscape scenery:
-
-![Photographic Scenery Comparison Grid](outputs/scenery_comparison_grid.png)
-
----
-
-## 👁️ 1. Human Visual Perception & Biological Foundations
-
-Human vision does **not** perceive all wavelengths of visible light with equal brightness. Color perception is mediated by three classes of retinal cone photoreceptors:
-
-```text
-                            HUMAN RETINA
-                                  │
-                 ┌────────────────┴────────────────┐
-                 ▼                                 ▼
-          ROD CELLS (~120M)                 CONE CELLS (~6M)
-     - Scotopic (dim-light) vision      - Photopic (daylight) vision
-     - Achromatic (intensity only)      - Chromatic (color perception)
-     - High light sensitivity           - High spatial & temporal acuity
-```
-
-### 1.1 Spectral Sensitivities of Retinal Cones:
-1. **S-Cones (Short Wavelength / Blue)**: Peak sensitivity $\lambda_{\text{peak}} \approx 420\text{ nm}$.
-2. **M-Cones (Medium Wavelength / Green)**: Peak sensitivity $\lambda_{\text{peak}} \approx 534\text{ nm}$.
-3. **L-Cones (Long Wavelength / Red)**: Peak sensitivity $\lambda_{\text{peak}} \approx 564\text{ nm}$.
-
-### 1.2 The Luminous Efficiency Function $V(\lambda)$:
-Standardized by CIE (1931), the photopic luminous efficiency curve shows peak human sensitivity at **$\lambda_{\text{max}} = 555\text{ nm}$ (Green-Yellow spectrum)**.
-- **Green light** accounts for **$\approx 59\% - 72\%$** of perceived subjective brightness.
-- **Red light** accounts for **$\approx 21\% - 30\%$**.
-- **Blue light** accounts for only **$\approx 7\% - 11\%$**.
-
----
-
-## 📐 2. Mathematical Formulations & Standards
-
-| Method | Formula | Standard / Application |
+| Method | Formula | Description / Standard |
 | :--- | :--- | :--- |
-| **ITU-R BT.601 Luma** | $Y = 0.299 \cdot R + 0.587 \cdot G + 0.114 \cdot B$ | SDTV / NTSC / PAL |
-| **ITU-R BT.709 Luma** | $Y = 0.2126 \cdot R + 0.7152 \cdot G + 0.0722 \cdot B$ | HDTV / sRGB Displays |
-| **Simple Average** | $Y = \frac{R + G + B}{3}$ | Naive Unweighted Mean |
-| **HSL Lightness** | $Y = \frac{\max(R, G, B) + \min(R, G, B)}{2}$ | Desaturation / HSL Model |
-| **Gamma-Corrected Luma** | $Y = 255 \cdot \left(0.2126 R_{\text{lin}} + 0.7152 G_{\text{lin}} + 0.0722 B_{\text{lin}}\right)^{1/\gamma}$ | Radiometric Energy Conservation |
-
-### 2.1 ITU-R BT.601 (SDTV Standard)
-$$Y_{601} = 0.299 \cdot R + 0.587 \cdot G + 0.114 \cdot B$$
-Developed for cathode-ray tubes (CRTs) and broadcast systems, assigning dominant weight ($58.7\%$) to green.
-
-### 2.2 ITU-R BT.709 (HDTV / Modern sRGB Monitors)
-$$Y_{709} = 0.2126 \cdot R + 0.7152 \cdot G + 0.0722 \cdot B$$
-Matches the purer phosphors and LED/OLED chromaticities of modern computer displays, raising green's weight to $71.52\%$.
-
-### 2.3 The Flaw of Simple Average
-$$Y_{\text{avg}} = \frac{R + G + B}{3}$$
-Assigns equal $33.3\%$ weight to Blue and Green. Under this formula, pure saturated Blue `(0, 0, 255)` produces the same greyscale value ($85$) as pure Green `(0, 255, 0)`, creating unnatural flat tones and destroying photographic contrast.
-
-### 2.4 Gamma Correction & Linear Radiant Flux
-Standard sRGB image files store non-linearly encoded pixel values ($C_{\text{sRGB}} \approx C_{\text{linear}}^{1/\gamma}$ with $\gamma \approx 2.2$).
-True physical energy conservation requires:
-1. **Gamma Expansion**: Converting sRGB values to linear radiometric energy $C_{\text{linear}} = (C/255)^\gamma$.
-2. **Linear Weighting**: Calculating linear luminance $Y_{\text{linear}} = 0.2126 R_{\text{linear}} + 0.7152 G_{\text{linear}} + 0.0722 B_{\text{linear}}$.
-3. **Gamma Compression**: Re-encoding to perceptual non-linear display space $Y = 255 \cdot Y_{\text{linear}}^{1/\gamma}$.
+| **ITU-R BT.601 Luma** | $Y = 0.299 \cdot R + 0.587 \cdot G + 0.114 \cdot B$ | Standard Definition (SDTV / NTSC / PAL) |
+| **ITU-R BT.709 Luma** | $Y = 0.2126 \cdot R + 0.7152 \cdot G + 0.0722 \cdot B$ | High Definition (HDTV / sRGB Monitors) |
+| **Simple Average** | $Y = \frac{R + G + B}{3}$ | Unweighted Arithmetic Mean |
+| **HSL Lightness** | $Y = \frac{\max(R, G, B) + \min(R, G, B)}{2}$ | Desaturation / HSL Model Midpoint |
+| **Gamma Corrected** | $Y = 255 \cdot \left(0.2126 R_{\text{lin}} + 0.7152 G_{\text{lin}} + 0.0722 B_{\text{lin}}\right)^{1/\gamma}$ | Radiometric Energy Conservation ($\gamma \approx 2.2$) |
 
 ---
 
-## 📊 3. Response Across Pure Primary Colors
+## 📊 2. Response Across Pure Primary Colors
 
 | Input Color | $(R, G, B)$ | Rec. 601 | Rec. 709 | Average | Lightness | Gamma Corrected |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -107,27 +41,16 @@ True physical energy conservation requires:
 
 ---
 
-## 💻 4. Code Structure & Usage
-
-### Files in this Module:
-- [`grayscale.py`](grayscale.py): Core conversion algorithms implemented in vectorized NumPy with pure Python fallbacks.
-- [`visualizer.py`](visualizer.py): Calibrated color target synthesizer, landscape generator, and side-by-side 9-panel composite grid visualizer with mathematical formulas.
-- [`main.py`](main.py): CLI interface for image conversion and statistical reporting.
-- [`test_grayscale.py`](test_grayscale.py): Pytest unit test suite.
-- [`outputs/`](outputs/): Output pictures for all conversion variants and side-by-side comparison grids.
-
-### Running via CLI:
+## 💻 3. CLI Execution & Testing
 
 ```bash
-# 1. Synthesize calibration test charts and generate all greyscale variants
-python task_2_rgb_to_greyscale_conversion/main.py --generate-test-patterns
+# Run greyscale conversions on the IIIT Nagpur logo
+python task_2_rgb_to_greyscale_conversion/main.py
 
-# 2. Convert any custom user image
+# Convert a custom user image
 python task_2_rgb_to_greyscale_conversion/main.py --input path/to/image.jpg --output-dir task_2_rgb_to_greyscale_conversion/outputs
-```
 
-### Running Unit Tests:
-```bash
+# Run unit tests
 pytest task_2_rgb_to_greyscale_conversion/test_grayscale.py -v
 ```
 

@@ -120,7 +120,7 @@ dip_lab_tasks/
 - **Detailed Documentation**: See [`task_1_tambola_ticket_generator/README.md`](task_1_tambola_ticket_generator/README.md).
 
 ### [Task 2: Standard RGB to Greyscale Image Conversion](task_2_rgb_to_greyscale_conversion/)
-- **Description**: Standard DIP algorithms for trichromatic RGB to greyscale conversion based on human retinal physiology (L, M, S cone sensitivities with peak photopic luminous efficiency $V(\lambda)$ at $555\text{ nm}$ green).
+- **Description**: Standard DIP algorithms for trichromatic RGB to greyscale conversion using perceptual luminance weighting and color models.
 - **Algorithms**: ITU-R BT.601, ITU-R BT.709 / sRGB, Simple Average, HSL Lightness, Gamma-Corrected Luma, and Single-Channel extraction.
 - **Detailed Documentation**: See [`task_2_rgb_to_greyscale_conversion/README.md`](task_2_rgb_to_greyscale_conversion/README.md).
 
